@@ -1,0 +1,66 @@
+version: 2
+updates:
+  # Dependencias de Flutter/Dart
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "irobert"
+    assignees:
+      - "irobert"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "flutter"
+    ignore:
+      # Ignorar actualizaciones de versiones major para evitar breaking changes
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Dependencias de GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "irobert"
+    assignees:
+      - "irobert"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Dependencias de Firebase Functions (si existen)
+  - package-ecosystem: "npm"
+    directory: "/functions"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "irobert"
+    assignees:
+      - "irobert"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "firebase-functions"
+    ignore:
+      # Ignorar actualizaciones de versiones major
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

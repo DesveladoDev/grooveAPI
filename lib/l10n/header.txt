@@ -1,0 +1,5 @@
+/// Generated file. Do not edit.
+///
+/// This file contains the localized strings for the Salas & Beats app.
+/// To add a new localized string, add it to the appropriate .arb file
+/// in the lib/l10n directory and run `flutter gen-l10n`.

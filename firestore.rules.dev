@@ -1,0 +1,124 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ⚠️ REGLAS TEMPORALES PARA DESARROLLO ⚠️
+    // ESTAS REGLAS PERMITEN ACCESO SIN AUTENTICACIÓN
+    // NO USAR EN PRODUCCIÓN
+    
+    // Función para verificar si el usuario está autenticado (opcional en dev)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Función para verificar si el usuario es el propietario del documento
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Reglas para usuarios - ACCESO ABIERTO EN DESARROLLO
+    match /users/{userId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para anfitriones - ACCESO ABIERTO EN DESARROLLO
+    match /hosts/{hostId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para listings - ACCESO ABIERTO EN DESARROLLO
+    match /listings/{listingId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+      
+      // Subcolección de disponibilidad
+      match /availability/{document} {
+        allow read, write: if true;
+      }
+      
+      // Subcolección de estadísticas del listing
+      match /stats/{document} {
+        allow read, write: if true;
+      }
+    }
+    
+    // Reglas para reservas - ACCESO ABIERTO EN DESARROLLO
+    match /bookings/{bookingId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+      
+      // Subcolección de pagos
+      match /payments/{document} {
+        allow read, write: if true;
+      }
+    }
+    
+    // Reglas para chats - ACCESO ABIERTO EN DESARROLLO
+    match /chats/{chatId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+      
+      // Subcolección de mensajes
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+    }
+    
+    // Reglas para reseñas - ACCESO ABIERTO EN DESARROLLO
+    match /reviews/{reviewId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para notificaciones - ACCESO ABIERTO EN DESARROLLO
+    match /notifications/{notificationId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para reportes administrativos - ACCESO ABIERTO EN DESARROLLO
+    match /admin/{document} {
+      allow read, write: if true; // Acceso completo para desarrollo
+      
+      // Subcolección de reportes
+      match /reports/{reportId} {
+        allow read, write: if true;
+      }
+      
+      // Subcolección de configuraciones
+      match /settings/{settingId} {
+        allow read, write: if true;
+      }
+    }
+    
+    // Reglas para configuraciones globales de la app - ACCESO ABIERTO EN DESARROLLO
+    match /app_settings/{document} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para reportes de usuarios - ACCESO ABIERTO EN DESARROLLO
+    match /reports/{reportId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para tokens FCM - ACCESO ABIERTO EN DESARROLLO
+    match /fcm_tokens/{userId} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para estadísticas globales - ACCESO ABIERTO EN DESARROLLO
+    match /global_stats/{document} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para logs del sistema - ACCESO ABIERTO EN DESARROLLO
+    match /system_logs/{document} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Reglas para webhooks de Stripe - ACCESO ABIERTO EN DESARROLLO
+    match /stripe_events/{document} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+    
+    // Regla por defecto - ACCESO ABIERTO EN DESARROLLO
+    match /{document=**} {
+      allow read, write: if true; // Acceso completo para desarrollo
+    }
+  }
+}

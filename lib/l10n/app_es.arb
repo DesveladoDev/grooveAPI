@@ -1,0 +1,1131 @@
+{
+  "@@locale": "es",
+  "@@last_modified": "2024-01-15T10:00:00.000Z",
+  
+  "appTitle": "Salas & Beats",
+  "@appTitle": {
+    "description": "Título de la aplicación"
+  },
+  
+  "appDescription": "Marketplace para rentar salas de ensayo y estudios de grabación",
+  "@appDescription": {
+    "description": "Descripción de la aplicación"
+  },
+
+  "welcome": "Bienvenido",
+  "@welcome": {
+    "description": "Mensaje de bienvenida"
+  },
+
+  "welcomeMessage": "Encuentra el espacio perfecto para tu música",
+  "@welcomeMessage": {
+    "description": "Mensaje de bienvenida principal"
+  },
+
+  "getStarted": "Comenzar",
+  "@getStarted": {
+    "description": "Botón para comenzar"
+  },
+
+  "login": "Iniciar Sesión",
+  "@login": {
+    "description": "Botón de inicio de sesión"
+  },
+
+  "register": "Registrarse",
+  "@register": {
+    "description": "Botón de registro"
+  },
+
+  "email": "Correo Electrónico",
+  "@email": {
+    "description": "Campo de correo electrónico"
+  },
+
+  "password": "Contraseña",
+  "@password": {
+    "description": "Campo de contraseña"
+  },
+
+  "confirmPassword": "Confirmar Contraseña",
+  "@confirmPassword": {
+    "description": "Campo de confirmación de contraseña"
+  },
+
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "@forgotPassword": {
+    "description": "Enlace para recuperar contraseña"
+  },
+
+  "resetPassword": "Restablecer Contraseña",
+  "@resetPassword": {
+    "description": "Botón para restablecer contraseña"
+  },
+
+  "signInWithGoogle": "Iniciar sesión con Google",
+  "@signInWithGoogle": {
+    "description": "Botón para iniciar sesión con Google"
+  },
+
+  "signInWithApple": "Iniciar sesión con Apple",
+  "@signInWithApple": {
+    "description": "Botón para iniciar sesión con Apple"
+  },
+
+  "home": "Inicio",
+  "@home": {
+    "description": "Pestaña de inicio"
+  },
+
+  "search": "Buscar",
+  "@search": {
+    "description": "Pestaña de búsqueda"
+  },
+
+  "bookings": "Reservas",
+  "@bookings": {
+    "description": "Pestaña de reservas"
+  },
+
+  "profile": "Perfil",
+  "@profile": {
+    "description": "Pestaña de perfil"
+  },
+
+  "searchStudios": "Buscar estudios...",
+  "@searchStudios": {
+    "description": "Placeholder para búsqueda de estudios"
+  },
+
+  "nearbyStudios": "Estudios Cercanos",
+  "@nearbyStudios": {
+    "description": "Sección de estudios cercanos"
+  },
+
+  "popularStudios": "Estudios Populares",
+  "@popularStudios": {
+    "description": "Sección de estudios populares"
+  },
+
+  "recentlyViewed": "Vistos Recientemente",
+  "@recentlyViewed": {
+    "description": "Sección de estudios vistos recientemente"
+  },
+
+  "filters": "Filtros",
+  "@filters": {
+    "description": "Botón de filtros"
+  },
+
+  "sortBy": "Ordenar por",
+  "@sortBy": {
+    "description": "Opción de ordenamiento"
+  },
+
+  "price": "Precio",
+  "@price": {
+    "description": "Filtro de precio"
+  },
+
+  "rating": "Calificación",
+  "@rating": {
+    "description": "Filtro de calificación"
+  },
+
+  "distance": "Distancia",
+  "@distance": {
+    "description": "Filtro de distancia"
+  },
+
+  "availability": "Disponibilidad",
+  "@availability": {
+    "description": "Filtro de disponibilidad"
+  },
+
+  "studioType": "Tipo de Estudio",
+  "@studioType": {
+    "description": "Filtro de tipo de estudio"
+  },
+
+  "rehearsalRoom": "Sala de Ensayo",
+  "@rehearsalRoom": {
+    "description": "Tipo de estudio: sala de ensayo"
+  },
+
+  "recordingStudio": "Estudio de Grabación",
+  "@recordingStudio": {
+    "description": "Tipo de estudio: estudio de grabación"
+  },
+
+  "liveRoom": "Sala en Vivo",
+  "@liveRoom": {
+    "description": "Tipo de estudio: sala en vivo"
+  },
+
+  "pricePerHour": "por hora",
+  "@pricePerHour": {
+    "description": "Sufijo de precio por hora"
+  },
+
+  "priceRange": "{min} - {max}",
+  "@priceRange": {
+    "description": "Rango de precios",
+    "placeholders": {
+      "min": {
+        "type": "String",
+        "description": "Precio mínimo"
+      },
+      "max": {
+        "type": "String",
+        "description": "Precio máximo"
+      }
+    }
+  },
+
+  "viewDetails": "Ver Detalles",
+  "@viewDetails": {
+    "description": "Botón para ver detalles"
+  },
+
+  "bookNow": "Reservar Ahora",
+  "@bookNow": {
+    "description": "Botón para reservar"
+  },
+
+  "selectDate": "Seleccionar Fecha",
+  "@selectDate": {
+    "description": "Botón para seleccionar fecha"
+  },
+
+  "selectTime": "Seleccionar Hora",
+  "@selectTime": {
+    "description": "Botón para seleccionar hora"
+  },
+
+  "duration": "Duración",
+  "@duration": {
+    "description": "Campo de duración"
+  },
+
+  "hours": "horas",
+  "@hours": {
+    "description": "Unidad de tiempo: horas"
+  },
+
+  "minutes": "minutos",
+  "@minutes": {
+    "description": "Unidad de tiempo: minutos"
+  },
+
+  "totalPrice": "Precio Total",
+  "@totalPrice": {
+    "description": "Precio total de la reserva"
+  },
+
+  "confirmBooking": "Confirmar Reserva",
+  "@confirmBooking": {
+    "description": "Botón para confirmar reserva"
+  },
+
+  "paymentMethod": "Método de Pago",
+  "@paymentMethod": {
+    "description": "Sección de método de pago"
+  },
+
+  "creditCard": "Tarjeta de Crédito",
+  "@creditCard": {
+    "description": "Método de pago: tarjeta de crédito"
+  },
+
+  "paypal": "PayPal",
+  "@paypal": {
+    "description": "Método de pago: PayPal"
+  },
+
+  "applePay": "Apple Pay",
+  "@applePay": {
+    "description": "Método de pago: Apple Pay"
+  },
+
+  "googlePay": "Google Pay",
+  "@googlePay": {
+    "description": "Método de pago: Google Pay"
+  },
+
+  "payNow": "Pagar Ahora",
+  "@payNow": {
+    "description": "Botón para pagar"
+  },
+
+  "bookingConfirmed": "Reserva Confirmada",
+  "@bookingConfirmed": {
+    "description": "Mensaje de confirmación de reserva"
+  },
+
+  "bookingDetails": "Detalles de la Reserva",
+  "@bookingDetails": {
+    "description": "Título de detalles de reserva"
+  },
+
+  "bookingId": "ID de Reserva",
+  "@bookingId": {
+    "description": "ID de la reserva"
+  },
+
+  "studioName": "Nombre del Estudio",
+  "@studioName": {
+    "description": "Nombre del estudio"
+  },
+
+  "date": "Fecha",
+  "@date": {
+    "description": "Campo de fecha"
+  },
+
+  "time": "Hora",
+  "@time": {
+    "description": "Campo de hora"
+  },
+
+  "location": "Ubicación",
+  "@location": {
+    "description": "Campo de ubicación"
+  },
+
+  "contact": "Contacto",
+  "@contact": {
+    "description": "Información de contacto"
+  },
+
+  "directions": "Direcciones",
+  "@directions": {
+    "description": "Botón para obtener direcciones"
+  },
+
+  "callStudio": "Llamar al Estudio",
+  "@callStudio": {
+    "description": "Botón para llamar al estudio"
+  },
+
+  "messageStudio": "Enviar Mensaje",
+  "@messageStudio": {
+    "description": "Botón para enviar mensaje al estudio"
+  },
+
+  "cancelBooking": "Cancelar Reserva",
+  "@cancelBooking": {
+    "description": "Botón para cancelar reserva"
+  },
+
+  "modifyBooking": "Modificar Reserva",
+  "@modifyBooking": {
+    "description": "Botón para modificar reserva"
+  },
+
+  "upcomingBookings": "Próximas Reservas",
+  "@upcomingBookings": {
+    "description": "Sección de próximas reservas"
+  },
+
+  "pastBookings": "Reservas Anteriores",
+  "@pastBookings": {
+    "description": "Sección de reservas anteriores"
+  },
+
+  "noBookings": "No tienes reservas",
+  "@noBookings": {
+    "description": "Mensaje cuando no hay reservas"
+  },
+
+  "exploreStudios": "Explorar Estudios",
+  "@exploreStudios": {
+    "description": "Botón para explorar estudios"
+  },
+
+  "rateExperience": "Calificar Experiencia",
+  "@rateExperience": {
+    "description": "Botón para calificar experiencia"
+  },
+
+  "writeReview": "Escribir Reseña",
+  "@writeReview": {
+    "description": "Botón para escribir reseña"
+  },
+
+  "submitReview": "Enviar Reseña",
+  "@submitReview": {
+    "description": "Botón para enviar reseña"
+  },
+
+  "reviews": "Reseñas",
+  "@reviews": {
+    "description": "Sección de reseñas"
+  },
+
+  "photos": "Fotos",
+  "@photos": {
+    "description": "Sección de fotos"
+  },
+
+  "amenities": "Servicios",
+  "@amenities": {
+    "description": "Sección de servicios/amenidades"
+  },
+
+  "equipment": "Equipamiento",
+  "@equipment": {
+    "description": "Sección de equipamiento"
+  },
+
+  "rules": "Reglas",
+  "@rules": {
+    "description": "Sección de reglas del estudio"
+  },
+
+  "cancellationPolicy": "Política de Cancelación",
+  "@cancellationPolicy": {
+    "description": "Política de cancelación"
+  },
+
+  "settings": "Configuración",
+  "@settings": {
+    "description": "Configuración de la aplicación"
+  },
+
+  "notifications": "Notificaciones",
+  "@notifications": {
+    "description": "Configuración de notificaciones"
+  },
+
+  "language": "Idioma",
+  "@language": {
+    "description": "Configuración de idioma"
+  },
+
+  "selectLanguage": "Seleccionar idioma",
+  "@selectLanguage": {
+    "description": "Title for language selection dialog"
+  },
+
+  "languageUpdated": "Idioma actualizado",
+  "@languageUpdated": {
+    "description": "Message shown when language is successfully changed"
+  },
+
+  "welcomeBack": "Bienvenido de vuelta",
+  "@welcomeBack": {
+    "description": "Welcome back title on login screen"
+  },
+  "signInToContinue": "Inicia sesión para continuar",
+  "@signInToContinue": {
+    "description": "Subtitle on login screen"
+  },
+  "email": "Correo electrónico",
+  "@email": {
+    "description": "Email field label"
+  },
+  "emailHint": "tu@email.com",
+  "@emailHint": {
+    "description": "Email field hint text"
+  },
+  "password": "Contraseña",
+  "@password": {
+    "description": "Password field label"
+  },
+  "passwordHint": "Tu contraseña",
+  "@passwordHint": {
+    "description": "Password field hint text"
+  },
+  "enterEmail": "Ingresa tu correo electrónico",
+  "@enterEmail": {
+    "description": "Email validation error message"
+  },
+  "enterValidEmail": "Ingresa un correo válido",
+  "@enterValidEmail": {
+    "description": "Invalid email format error message"
+  },
+  "enterPassword": "Ingresa tu contraseña",
+  "@enterPassword": {
+    "description": "Password validation error message"
+  },
+  "passwordMinLength": "La contraseña debe tener al menos {minLength} caracteres",
+  "@passwordMinLength": {
+    "description": "Password minimum length error message",
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "completeAllFields": "Completa todos los campos correctamente",
+  "@completeAllFields": {
+    "description": "Form validation message"
+  },
+  "signIn": "Iniciar Sesión",
+  "@signIn": {
+    "description": "Sign in button text"
+  },
+  "completeForm": "Completa el formulario",
+  "@completeForm": {
+    "description": "Disabled button text when form is incomplete"
+  },
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "or": "O",
+  "@or": {
+    "description": "Divider text between login methods"
+  },
+  "continueWithGoogle": "Continuar con Google",
+  "@continueWithGoogle": {
+    "description": "Google sign in button text"
+  },
+  "continueWithApple": "Continuar con Apple",
+  "@continueWithApple": {
+    "description": "Apple sign in button text"
+  },
+  "createUserDocument": "Crear Documento Usuario (Temporal)",
+  "@createUserDocument": {
+    "description": "Text for create user document button"
+  },
+  "noAccount": "¿No tienes cuenta?",
+  "@noAccount": {
+    "description": "Text asking if user doesn't have an account"
+  },
+  "register": "Regístrate",
+  "@register": {
+    "description": "Text for register button"
+  },
+  "signInError": "Error al iniciar sesión",
+  "@signInError": {
+    "description": "Error message for sign in failure"
+  },
+  "unexpectedError": "Error inesperado. Inténtalo de nuevo.",
+  "@unexpectedError": {
+    "description": "Error message for unexpected errors"
+  },
+  "googleSignInError": "Error al iniciar sesión con Google",
+  "@googleSignInError": {
+    "description": "Error message for Google sign in failure"
+  },
+  "appleSignInError": "Error al iniciar sesión con Apple",
+  "@appleSignInError": {
+    "description": "Error message for Apple sign in failure"
+  },
+  "userDocumentCreated": "Documento de usuario creado exitosamente",
+  "@userDocumentCreated": {
+    "description": "Success message for user document creation"
+  },
+  "createDocumentError": "Error al crear documento: {error}",
+  "@createDocumentError": {
+    "description": "Error message for document creation failure",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "createAccount": "Crear cuenta",
+  "@createAccount": {
+    "description": "Title for create account screen"
+  },
+  "joinMusicalCommunity": "Únete a la comunidad musical",
+  "@joinMusicalCommunity": {
+    "description": "Subtitle for create account screen"
+  },
+  "accountType": "Tipo de cuenta",
+  "@accountType": {
+    "description": "Label for account type selector"
+  },
+  "musician": "Músico",
+  "@musician": {
+    "description": "Musician account type"
+  },
+  "searchAndBookRooms": "Busca y reserva salas",
+  "@searchAndBookRooms": {
+    "description": "Description for musician account type"
+  },
+  "host": "Anfitrión",
+  "@host": {
+    "description": "Host account type"
+  },
+  "rentYourSpace": "Renta tu espacio",
+  "@rentYourSpace": {
+    "description": "Description for host account type"
+  },
+  "fullName": "Nombre completo",
+  "@fullName": {
+    "description": "Label for full name field"
+  },
+  "yourName": "Tu nombre",
+  "@yourName": {
+    "description": "Hint for name field"
+  },
+  "enterName": "Ingresa tu nombre",
+  "@enterName": {
+    "description": "Validation message for empty name"
+  },
+  "nameMinLength": "El nombre debe tener al menos 2 caracteres",
+  "@nameMinLength": {
+    "description": "Validation message for name minimum length"
+  },
+  "emailAddress": "Correo electrónico",
+  "@emailAddress": {
+    "description": "Label for email field"
+  },
+  "phoneOptional": "Teléfono (opcional)",
+  "@phoneOptional": {
+    "description": "Label for optional phone field"
+  },
+  "phoneHint": "+52 55 1234 5678",
+  "@phoneHint": {
+    "description": "Hint for phone field"
+  },
+  "enterValidPhone": "Ingresa un teléfono válido",
+  "@enterValidPhone": {
+    "description": "Validation message for invalid phone"
+  },
+  "passwordMinLengthHint": "Mínimo {length} caracteres",
+  "@passwordMinLengthHint": {
+    "description": "Hint for password minimum length",
+    "placeholders": {
+      "length": {
+        "type": "int",
+        "description": "Minimum password length"
+      }
+    }
+  },
+  "passwordHelperText": "Debe tener al menos {length} caracteres",
+  "@passwordHelperText": {
+    "description": "Helper text for password requirements",
+    "placeholders": {
+      "length": {
+        "type": "int",
+        "description": "Minimum password length"
+      }
+    }
+  },
+  "passwordMinLengthError": "La contraseña debe tener al menos {length} caracteres",
+  "@passwordMinLengthError": {
+    "description": "Mensaje de error para contraseña muy corta",
+    "placeholders": {
+      "length": {
+        "type": "int",
+        "description": "Longitud mínima de contraseña"
+      }
+    }
+  },
+  "confirmPassword": "Confirmar contraseña",
+  "@confirmPassword": {
+    "description": "Label for confirm password field"
+  },
+  "repeatPassword": "Repite tu contraseña",
+  "@repeatPassword": {
+    "description": "Hint for confirm password field"
+  },
+  "passwordsDoNotMatch": "Las contraseñas no coinciden",
+  "@passwordsDoNotMatch": {
+    "description": "Validation message when passwords don't match"
+  },
+  "confirmYourPassword": "Confirma tu contraseña",
+  "@confirmYourPassword": {
+    "description": "Validation message for empty confirm password"
+  },
+  "acceptTerms": "Acepto los ",
+  "@acceptTerms": {
+    "description": "Text before terms and conditions link"
+  },
+  "termsAndConditions": "términos y condiciones",
+  "@termsAndConditions": {
+    "description": "Terms and conditions link text"
+  },
+  "andPrivacyPolicy": " y política de privacidad",
+  "@andPrivacyPolicy": {
+    "description": "Text after terms and conditions link"
+  },
+  "completeFollowingFields": "Completa los siguientes campos:",
+  "@completeFollowingFields": {
+    "description": "Text for validation checklist header"
+  },
+  "validName": "Nombre válido",
+  "@validName": {
+    "description": "Validation checklist item for name"
+  },
+  "validEmail": "Email válido",
+  "@validEmail": {
+    "description": "Validation checklist item for email"
+  },
+  "securePassword": "Contraseña segura",
+  "@securePassword": {
+    "description": "Validation checklist item for password"
+  },
+  "passwordsMatch": "Contraseñas coinciden",
+  "@passwordsMatch": {
+    "description": "Validation checklist item for password confirmation"
+  },
+  "termsAccepted": "Términos aceptados",
+  "@termsAccepted": {
+    "description": "Validation checklist item for terms acceptance"
+  },
+  "createAccountButton": "Crear Cuenta",
+  "@createAccountButton": {
+    "description": "Text for create account button"
+  },
+  "completeForm": "Completa el formulario",
+  "@completeForm": {
+    "description": "Text for disabled create account button"
+  },
+  "continueWithGoogle": "Continuar con Google",
+  "@continueWithGoogle": {
+    "description": "Text for Google registration button"
+  },
+  "alreadyHaveAccount": "¿Ya tienes cuenta? ",
+  "@alreadyHaveAccount": {
+    "description": "Text before sign in link"
+  },
+  "signIn": "Inicia sesión",
+  "@signIn": {
+    "description": "Sign in link text"
+  },
+  "mustAcceptTerms": "Debes aceptar los términos y condiciones",
+  "@mustAcceptTerms": {
+    "description": "Error message when terms are not accepted"
+  },
+  "accountCreatedSuccessfully": "Cuenta creada exitosamente. Verifica tu email.",
+  "@accountCreatedSuccessfully": {
+    "description": "Success message for account creation"
+  },
+  "unknownRegistrationError": "Error desconocido durante el registro",
+  "@unknownRegistrationError": {
+    "description": "Generic registration error message"
+  },
+  "googleRegistrationError": "Error al registrarse con Google",
+  "@googleRegistrationError": {
+    "description": "Error message for Google registration failure"
+  },
+  "termsAndConditionsTitle": "Términos y Condiciones",
+  "@termsAndConditionsTitle": {
+    "description": "Title for terms and conditions dialog"
+  },
+  "termsContent": "Al usar Salas & Beats, aceptas nuestros términos de servicio y política de privacidad.\n\nComo músico, puedes buscar y reservar salas de ensayo.\n\nComo anfitrión, puedes listar tu espacio y recibir pagos por las reservas.\n\nNos reservamos el derecho de suspender cuentas que violen nuestras políticas.",
+  "@termsContent": {
+    "description": "Content for terms and conditions dialog"
+  },
+  "close": "Cerrar",
+  "@close": {
+    "description": "Close button text"
+  },
+
+  "theme": "Tema",
+  "@theme": {
+    "description": "Configuración de tema"
+  },
+
+  "lightTheme": "Tema Claro",
+  "@lightTheme": {
+    "description": "Tema claro"
+  },
+
+  "darkTheme": "Tema Oscuro",
+  "@darkTheme": {
+    "description": "Tema oscuro"
+  },
+
+  "systemTheme": "Tema del Sistema",
+  "@systemTheme": {
+    "description": "Tema del sistema"
+  },
+
+  "privacy": "Privacidad",
+  "@privacy": {
+    "description": "Configuración de privacidad"
+  },
+
+  "termsOfService": "Términos de Servicio",
+  "@termsOfService": {
+    "description": "Términos de servicio"
+  },
+
+  "privacyPolicy": "Política de Privacidad",
+  "@privacyPolicy": {
+    "description": "Política de privacidad"
+  },
+
+  "help": "Ayuda",
+  "@help": {
+    "description": "Sección de ayuda"
+  },
+
+  "support": "Soporte",
+  "@support": {
+    "description": "Soporte técnico"
+  },
+
+  "faq": "Preguntas Frecuentes",
+  "@faq": {
+    "description": "Preguntas frecuentes"
+  },
+
+  "contactUs": "Contáctanos",
+  "@contactUs": {
+    "description": "Contactar soporte"
+  },
+
+  "logout": "Cerrar Sesión",
+  "@logout": {
+    "description": "Botón para cerrar sesión"
+  },
+
+  "deleteAccount": "Eliminar Cuenta",
+  "@deleteAccount": {
+    "description": "Botón para eliminar cuenta"
+  },
+
+  "editProfile": "Editar Perfil",
+  "@editProfile": {
+    "description": "Botón para editar perfil"
+  },
+
+  "firstName": "Nombre",
+  "@firstName": {
+    "description": "Campo de nombre"
+  },
+
+  "lastName": "Apellido",
+  "@lastName": {
+    "description": "Campo de apellido"
+  },
+
+  "phoneNumber": "Número de Teléfono",
+  "@phoneNumber": {
+    "description": "Campo de número de teléfono"
+  },
+
+  "dateOfBirth": "Fecha de Nacimiento",
+  "@dateOfBirth": {
+    "description": "Campo de fecha de nacimiento"
+  },
+
+  "saveChanges": "Guardar Cambios",
+  "@saveChanges": {
+    "description": "Botón para guardar cambios"
+  },
+
+  "discardChanges": "Descartar Cambios",
+  "@discardChanges": {
+    "description": "Botón para descartar cambios"
+  },
+
+  "loading": "Cargando...",
+  "@loading": {
+    "description": "Mensaje de carga"
+  },
+
+  "error": "Error",
+  "@error": {
+    "description": "Mensaje de error genérico"
+  },
+
+  "retry": "Reintentar",
+  "@retry": {
+    "description": "Botón para reintentar"
+  },
+
+  "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Botón para cancelar"
+  },
+
+  "confirm": "Confirmar",
+  "@confirm": {
+    "description": "Botón para confirmar"
+  },
+
+  "save": "Guardar",
+  "@save": {
+    "description": "Botón para guardar"
+  },
+
+  "delete": "Eliminar",
+  "@delete": {
+    "description": "Botón para eliminar"
+  },
+
+  "edit": "Editar",
+  "@edit": {
+    "description": "Botón para editar"
+  },
+
+  "share": "Compartir",
+  "@share": {
+    "description": "Botón para compartir"
+  },
+
+  "favorite": "Favorito",
+  "@favorite": {
+    "description": "Botón para marcar como favorito"
+  },
+
+  "unfavorite": "Quitar de Favoritos",
+  "@unfavorite": {
+    "description": "Botón para quitar de favoritos"
+  },
+
+  "favorites": "Favoritos",
+  "@favorites": {
+    "description": "Sección de favoritos"
+  },
+
+  "noFavorites": "No tienes favoritos",
+  "@noFavorites": {
+    "description": "Mensaje cuando no hay favoritos"
+  },
+
+  "addToFavorites": "Agregar a Favoritos",
+  "@addToFavorites": {
+    "description": "Botón para agregar a favoritos"
+  },
+
+  "removeFromFavorites": "Quitar de Favoritos",
+  "@removeFromFavorites": {
+    "description": "Botón para quitar de favoritos"
+  },
+
+  "searchResults": "Resultados de Búsqueda",
+  "@searchResults": {
+    "description": "Título de resultados de búsqueda"
+  },
+
+  "noResults": "No se encontraron resultados",
+  "@noResults": {
+    "description": "Mensaje cuando no hay resultados"
+  },
+
+  "tryDifferentSearch": "Intenta con una búsqueda diferente",
+  "@tryDifferentSearch": {
+    "description": "Sugerencia cuando no hay resultados"
+  },
+
+  "clearFilters": "Limpiar Filtros",
+  "@clearFilters": {
+    "description": "Botón para limpiar filtros"
+  },
+
+  "applyFilters": "Aplicar Filtros",
+  "@applyFilters": {
+    "description": "Botón para aplicar filtros"
+  },
+
+  "map": "Mapa",
+  "@map": {
+    "description": "Vista de mapa"
+  },
+
+  "list": "Lista",
+  "@list": {
+    "description": "Vista de lista"
+  },
+
+  "openingHours": "Horarios de Apertura",
+  "@openingHours": {
+    "description": "Horarios de apertura del estudio"
+  },
+
+  "closed": "Cerrado",
+  "@closed": {
+    "description": "Estado cerrado"
+  },
+
+  "open": "Abierto",
+  "@open": {
+    "description": "Estado abierto"
+  },
+
+  "opensAt": "Abre a las {time}",
+  "@opensAt": {
+    "description": "Hora de apertura",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Hora de apertura"
+      }
+    }
+  },
+
+  "closesAt": "Cierra a las {time}",
+  "@closesAt": {
+    "description": "Hora de cierre",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Hora de cierre"
+      }
+    }
+  },
+
+  "available": "Disponible",
+  "@available": {
+    "description": "Estado disponible"
+  },
+
+  "unavailable": "No Disponible",
+  "@unavailable": {
+    "description": "Estado no disponible"
+  },
+
+  "booked": "Reservado",
+  "@booked": {
+    "description": "Estado reservado"
+  },
+
+  "pending": "Pendiente",
+  "@pending": {
+    "description": "Estado pendiente"
+  },
+
+  "confirmed": "Confirmado",
+  "@confirmed": {
+    "description": "Estado confirmado"
+  },
+
+  "cancelled": "Cancelado",
+  "@cancelled": {
+    "description": "Estado cancelado"
+  },
+
+  "completed": "Completado",
+  "@completed": {
+    "description": "Estado completado"
+  },
+
+  "refunded": "Reembolsado",
+  "@refunded": {
+    "description": "Estado reembolsado"
+  },
+
+  "hello": "Hola, {name}",
+  "@hello": {
+    "description": "Saludo personalizado en home screen",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Nombre del usuario"
+      }
+    }
+  },
+
+  "findPerfectSpace": "Encuentra tu espacio musical perfecto",
+  "@findPerfectSpace": {
+    "description": "Subtítulo del home screen"
+  },
+
+  "searchPlaceholder": "Buscar salas, ubicación...",
+  "@searchPlaceholder": {
+    "description": "Placeholder de la barra de búsqueda"
+  },
+
+  "pricePerHour": "${price}/hora",
+  "@pricePerHour": {
+    "description": "Formato de precio por hora",
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "description": "Precio por hora"
+      }
+    }
+  },
+
+  "upToCapacity": "Hasta {capacity} personas",
+  "@upToCapacity": {
+    "description": "Capacidad máxima del espacio",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "description": "Número máximo de personas"
+      }
+    }
+  },
+
+  "noRoomsFound": "No se encontraron salas",
+  "@noRoomsFound": {
+    "description": "Mensaje cuando no hay resultados de búsqueda"
+  },
+
+  "adjustFiltersMessage": "Intenta ajustar tus filtros o buscar en otra ubicación",
+  "@adjustFiltersMessage": {
+    "description": "Mensaje de sugerencia cuando no hay resultados"
+  },
+
+  "clearFilters": "Limpiar filtros",
+  "@clearFilters": {
+    "description": "Botón para limpiar filtros"
+  },
+
+  "filters": "Filtros",
+  "@filters": {
+    "description": "Título del modal de filtros"
+  },
+
+  "clear": "Limpiar",
+  "@clear": {
+    "description": "Botón para limpiar en filtros"
+  },
+
+  "city": "Ciudad",
+  "@city": {
+    "description": "Label para filtro de ciudad"
+  },
+
+  "all": "Todas",
+  "@all": {
+    "description": "Opción para mostrar todas las opciones"
+  },
+
+  "maxPricePerHour": "Precio máximo por hora: ${price}",
+  "@maxPricePerHour": {
+    "description": "Label para filtro de precio máximo",
+    "placeholders": {
+      "price": {
+        "type": "int",
+        "description": "Precio máximo seleccionado"
+      }
+    }
+  },
+
+  "amenities": "Amenidades",
+  "@amenities": {
+    "description": "Label para filtro de amenidades"
+  },
+
+  "applyFilters": "Aplicar filtros",
+  "@applyFilters": {
+    "description": "Botón para aplicar filtros"
+  },
+
+  "home": "Inicio",
+  "@home": {
+    "description": "Tab de inicio en navegación inferior"
+  },
+
+  "explore": "Explorar",
+  "@explore": {
+    "description": "Tab de explorar en navegación inferior"
+  },
+
+  "bookings": "Reservas",
+  "@bookings": {
+    "description": "Tab de reservas en navegación inferior"
+  },
+
+  "messages": "Mensajes",
+  "@messages": {
+    "description": "Tab de mensajes en navegación inferior"
+  },
+
+  "profile": "Perfil",
+  "@profile": {
+    "description": "Tab de perfil en navegación inferior"
+  }
+}
