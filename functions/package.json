@@ -27,7 +27,7 @@
     "nodemailer": "^6.9.8",
     "twilio": "^4.19.3",
     "@google-cloud/firestore": "^7.1.0",
-    "@google-cloud/storage": "^7.7.0"
+    "@google-cloud/storage": "^7.17.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
