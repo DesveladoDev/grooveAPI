@@ -1347,6 +1347,132 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Mensajes'**
   String get messages;
+
+  /// Error general para creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Error al crear perfil'**
+  String get profileCreationError;
+
+  /// Error de red durante creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo crear el perfil. Verifica tu conexión a internet e intenta nuevamente.'**
+  String get profileCreationNetworkError;
+
+  /// Error de validación durante creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos del perfil no son válidos. Revisa la información ingresada.'**
+  String get profileCreationValidationError;
+
+  /// Error de permisos durante creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes permisos para crear este perfil. Contacta al administrador.'**
+  String get profileCreationPermissionError;
+
+  /// Error del servidor durante creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Error interno del servidor. Intenta nuevamente en unos minutos.'**
+  String get profileCreationServerError;
+
+  /// Error de timeout durante creación de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'La creación del perfil tardó demasiado tiempo. Verifica tu conexión e intenta nuevamente.'**
+  String get profileCreationTimeoutError;
+
+  /// Error general para actualización de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Error al actualizar perfil'**
+  String get profileUpdateError;
+
+  /// Error de red durante actualización de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo actualizar el perfil. Verifica tu conexión a internet.'**
+  String get profileUpdateNetworkError;
+
+  /// Error de validación durante actualización de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos ingresados no son válidos. Revisa la información.'**
+  String get profileUpdateValidationError;
+
+  /// Error de permisos durante actualización de perfil
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes permisos para actualizar este perfil.'**
+  String get profileUpdatePermissionError;
+
+  /// Error cuando el perfil está incompleto
+  ///
+  /// In es, this message translates to:
+  /// **'Tu perfil está incompleto. Completa todos los campos requeridos.'**
+  String get profileIncompleteError;
+
+  /// Error cuando falta el nombre en el perfil
+  ///
+  /// In es, this message translates to:
+  /// **'El nombre es obligatorio para crear tu perfil.'**
+  String get profileNameRequiredError;
+
+  /// Error cuando falta el email en el perfil
+  ///
+  /// In es, this message translates to:
+  /// **'El email es obligatorio para crear tu perfil.'**
+  String get profileEmailRequiredError;
+
+  /// Error cuando falta el rol en el perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Debes seleccionar un tipo de cuenta (Músico o Anfitrión).'**
+  String get profileRoleRequiredError;
+
+  /// Error cuando el nombre es muy corto
+  ///
+  /// In es, this message translates to:
+  /// **'El nombre debe tener al menos 2 caracteres.'**
+  String get profileNameTooShortError;
+
+  /// Error cuando el nombre es muy largo
+  ///
+  /// In es, this message translates to:
+  /// **'El nombre no puede tener más de 50 caracteres.'**
+  String get profileNameTooLongError;
+
+  /// Error cuando el email tiene formato inválido
+  ///
+  /// In es, this message translates to:
+  /// **'El formato del email no es válido.'**
+  String get profileEmailInvalidError;
+
+  /// Error cuando el teléfono tiene formato inválido
+  ///
+  /// In es, this message translates to:
+  /// **'El formato del teléfono no es válido.'**
+  String get profilePhoneInvalidError;
+
+  /// Error cuando la biografía es muy larga
+  ///
+  /// In es, this message translates to:
+  /// **'La biografía no puede tener más de 500 caracteres.'**
+  String get profileBioTooLongError;
+
+  /// Mensaje de éxito al crear perfil
+  ///
+  /// In es, this message translates to:
+  /// **'¡Perfil creado exitosamente! Bienvenido a Salas & Beats.'**
+  String get profileCreationSuccessMessage;
+
+  /// Mensaje de éxito al actualizar perfil
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil actualizado exitosamente.'**
+  String get profileUpdateSuccessMessage;
 }
 
 class _AppLocalizationsDelegate

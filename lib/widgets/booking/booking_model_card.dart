@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 
 class BookingModelCard extends StatelessWidget {
 

@@ -660,4 +660,84 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get messages => 'Mensajes';
+
+  @override
+  String get profileCreationError => 'Error al crear perfil';
+
+  @override
+  String get profileCreationNetworkError =>
+      'No se pudo crear el perfil. Verifica tu conexión a internet e intenta nuevamente.';
+
+  @override
+  String get profileCreationValidationError =>
+      'Los datos del perfil no son válidos. Revisa la información ingresada.';
+
+  @override
+  String get profileCreationPermissionError =>
+      'No tienes permisos para crear este perfil. Contacta al administrador.';
+
+  @override
+  String get profileCreationServerError =>
+      'Error interno del servidor. Intenta nuevamente en unos minutos.';
+
+  @override
+  String get profileCreationTimeoutError =>
+      'La creación del perfil tardó demasiado tiempo. Verifica tu conexión e intenta nuevamente.';
+
+  @override
+  String get profileUpdateError => 'Error al actualizar perfil';
+
+  @override
+  String get profileUpdateNetworkError =>
+      'No se pudo actualizar el perfil. Verifica tu conexión a internet.';
+
+  @override
+  String get profileUpdateValidationError =>
+      'Los datos ingresados no son válidos. Revisa la información.';
+
+  @override
+  String get profileUpdatePermissionError =>
+      'No tienes permisos para actualizar este perfil.';
+
+  @override
+  String get profileIncompleteError =>
+      'Tu perfil está incompleto. Completa todos los campos requeridos.';
+
+  @override
+  String get profileNameRequiredError =>
+      'El nombre es obligatorio para crear tu perfil.';
+
+  @override
+  String get profileEmailRequiredError =>
+      'El email es obligatorio para crear tu perfil.';
+
+  @override
+  String get profileRoleRequiredError =>
+      'Debes seleccionar un tipo de cuenta (Músico o Anfitrión).';
+
+  @override
+  String get profileNameTooShortError =>
+      'El nombre debe tener al menos 2 caracteres.';
+
+  @override
+  String get profileNameTooLongError =>
+      'El nombre no puede tener más de 50 caracteres.';
+
+  @override
+  String get profileEmailInvalidError => 'El formato del email no es válido.';
+
+  @override
+  String get profilePhoneInvalidError =>
+      'El formato del teléfono no es válido.';
+
+  @override
+  String get profileBioTooLongError =>
+      'La biografía no puede tener más de 500 caracteres.';
+
+  @override
+  String get profileCreationSuccessMessage =>
+      '¡Perfil creado exitosamente! Bienvenido a Salas & Beats.';
+
+  @override
+  String get profileUpdateSuccessMessage => 'Perfil actualizado exitosamente.';
 }

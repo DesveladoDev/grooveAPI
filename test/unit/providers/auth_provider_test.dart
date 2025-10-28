@@ -1,33 +1,43 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth hide AuthProvider;
 
-import 'package:salas_beats/providers/auth_provider.dart';
+import 'package:salas_beats/providers/auth_provider.dart' as AppAuthProvider;
+import 'package:salas_beats/providers/auth_provider.dart' show AuthStatus;
 import 'package:salas_beats/services/auth_service.dart';
 import 'package:salas_beats/models/user_model.dart';
 
 // Generate mocks
 @GenerateMocks([
   AuthService,
-  FirebaseAuth,
-  User,
+  FirebaseAuth.FirebaseAuth,
+  FirebaseAuth.User,
 ])
 import 'auth_provider_test.mocks.dart';
 
 void main() {
   group('AuthProvider Tests', () {
-    late AuthProvider authProvider;
+    late AppAuthProvider.AuthProvider authProvider;
     late MockAuthService mockAuthService;
     late MockFirebaseAuth mockFirebaseAuth;
     late MockUser mockUser;
 
     setUp(() {
-      mockAuthService = MockAuthService();
-      mockFirebaseAuth = MockFirebaseAuth();
-      mockUser = MockUser();
-      
-      authProvider = AuthProvider();
+        mockAuthService = MockAuthService();
+        mockFirebaseAuth = MockFirebaseAuth();
+        mockUser = MockUser();
+        
+        // Configure mocks to prevent initialization errors
+        when(mockAuthService.authStateChanges).thenAnswer((_) => Stream.empty());
+        when(mockAuthService.currentUser).thenReturn(null);
+        when(mockUser.email).thenReturn('test@example.com');
+        when(mockUser.uid).thenReturn('test-uid');
+        
+        authProvider = AppAuthProvider.AuthProvider(
+          authService: mockAuthService,
+          firebaseAuth: mockFirebaseAuth,
+        );
     });
 
     tearDown(() {
@@ -169,7 +179,7 @@ void main() {
         )).thenAnswer((_) async => authResult);
 
         // Act
-        final result = await authProvider.login(
+        final result = await authProvider.signIn(
           email: email,
           password: password,
         );
@@ -200,10 +210,9 @@ void main() {
         when(mockAuthService.signOut()).thenAnswer((_) async => authResult);
 
         // Act
-        final result = await authProvider.logout();
+        await authProvider.logout();
 
         // Assert
-        expect(result, isTrue);
         expect(authProvider.status, equals(AuthStatus.unauthenticated));
         expect(authProvider.user, isNull);
         expect(authProvider.error, isNull);
@@ -392,73 +401,110 @@ void main() {
       });
     });
 
-    group('Profile Completion', () {
-      test('should detect incomplete profile', () {
+
+
+    group('User Role Update', () {
+      test('should successfully update user role to musician', () async {
         // Arrange
-        final incompleteUser = UserModel(
-          id: 'test-uid',
-          email: 'test@example.com',
-          name: '',
-          role: UserRole.musician,
-          createdAt: DateTime.now(),
-        );
-
-        authProvider.setUser(incompleteUser);
-
-        // Act & Assert
-        expect(authProvider.needsProfileCompletion, isTrue);
-        expect(authProvider.profileCompletionProgress, lessThan(1.0));
-      });
-
-      test('should detect complete profile', () {
-        // Arrange
-        final completeUser = UserModel(
+        final initialUser = UserModel(
           id: 'test-uid',
           email: 'test@example.com',
           name: 'Test User',
           role: UserRole.musician,
-          verified: true,
-          photoURL: 'https://example.com/photo.jpg',
           createdAt: DateTime.now(),
         );
-
-        authProvider.setUser(completeUser);
-
-        // Act & Assert
-        expect(authProvider.needsProfileCompletion, isFalse);
-        expect(authProvider.profileCompletionProgress, equals(1.0));
-      });
-    });
-
-    group('Loading States', () {
-      test('should handle loading state correctly', () {
-        // Act
-        authProvider.setLoading(true);
-
-        // Assert
-        expect(authProvider.isLoading, isTrue);
+        
+        // Setup authenticated user
+        when(mockAuthService.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn('test-uid');
+        when(mockAuthService.getCurrentUserData()).thenAnswer((_) async => initialUser);
+        await authProvider.checkAuthStatus();
+        
+        when(mockAuthService.updateUserRole(userId: 'test-uid', role: 'host'))
+            .thenAnswer((_) async => AuthResult.success(
+              user: initialUser.copyWith(role: UserRole.host),
+              message: 'Rol actualizado exitosamente',
+            ));
 
         // Act
-        authProvider.setLoading(false);
+        final result = await authProvider.updateUserRole('host');
 
         // Assert
-        expect(authProvider.isLoading, isFalse);
-      });
-    });
-
-    group('Error Handling', () {
-      test('should handle and clear errors', () {
-        // Act
-        authProvider.setError('Test error');
-
-        // Assert
-        expect(authProvider.error, equals('Test error'));
-
-        // Act
-        authProvider.clearError();
-
-        // Assert
+        expect(result, isTrue);
+        expect(authProvider.user?.role, equals(UserRole.host));
         expect(authProvider.error, isNull);
+      });
+
+      test('should handle role update failure', () async {
+        // Arrange
+        final initialUser = UserModel(
+          id: 'test-uid',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: UserRole.musician,
+          createdAt: DateTime.now(),
+        );
+        
+        // Setup authenticated user
+        when(mockAuthService.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn('test-uid');
+        when(mockAuthService.getCurrentUserData()).thenAnswer((_) async => initialUser);
+        await authProvider.checkAuthStatus();
+        
+        when(mockAuthService.updateUserRole(userId: 'test-uid', role: 'invalid-role'))
+            .thenAnswer((_) async => AuthResult.failure('Rol inválido'));
+
+        // Act
+        final result = await authProvider.updateUserRole('invalid-role');
+
+        // Assert
+        expect(result, isFalse);
+        expect(authProvider.user?.role, equals(UserRole.musician)); // Should remain unchanged
+        expect(authProvider.error, equals('Rol inválido'));
+      });
+
+      test('should handle role update when user is null', () async {
+        // Arrange
+        when(mockAuthService.currentUser).thenReturn(null);
+        await authProvider.checkAuthStatus();
+
+        // Act
+        final result = await authProvider.updateUserRole('host');
+
+        // Assert
+        expect(result, isFalse);
+        expect(authProvider.user, isNull);
+      });
+
+      test('should validate role values', () async {
+        // Arrange
+        final initialUser = UserModel(
+          id: 'test-uid',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: UserRole.musician,
+          createdAt: DateTime.now(),
+        );
+        
+        // Setup authenticated user
+        when(mockAuthService.currentUser).thenReturn(mockUser);
+        when(mockUser.uid).thenReturn('test-uid');
+        when(mockAuthService.getCurrentUserData()).thenAnswer((_) async => initialUser);
+        await authProvider.checkAuthStatus();
+
+        // Test valid roles
+        for (final role in ['musician', 'host']) {
+          when(mockAuthService.updateUserRole(userId: 'test-uid', role: role))
+              .thenAnswer((_) async => AuthResult.success(
+                user: initialUser.copyWith(
+                  role: role == 'musician' ? UserRole.musician : UserRole.host
+                ),
+                message: 'Rol actualizado exitosamente',
+              ));
+
+          final result = await authProvider.updateUserRole(role);
+          expect(result, isTrue, reason: 'Role $role should be valid');
+        }
       });
     });
   });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/utils/app_routes.dart';
 
 class BookingsScreen extends StatefulWidget {

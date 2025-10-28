@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:salas_beats/models/user_model.dart';
+import 'package:salas_beats/models/user_model.dart' as UserModel;
 import 'package:salas_beats/services/auth_service.dart';
+import 'package:salas_beats/utils/profile_error_handler.dart';
 
 enum AuthStatus {
   uninitialized,
@@ -13,28 +14,30 @@ enum AuthStatus {
 
 class AuthProvider extends ChangeNotifier {
 
-  AuthProvider() {
+  AuthProvider({AuthService? authService, FirebaseAuth? firebaseAuth}) 
+    : _authService = authService ?? AuthService(),
+      _auth = firebaseAuth ?? FirebaseAuth.instance {
     _initializeAuth();
   }
-  final AuthService _authService = AuthService();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService;
+  final FirebaseAuth _auth;
   
   AuthStatus _status = AuthStatus.uninitialized;
-  UserModel? _user;
+  UserModel.UserModel? _user;
   String? _error;
   bool _isLoading = false;
 
   // Getters
   AuthStatus get status => _status;
-  UserModel? get user => _user;
-  UserModel? get currentUser => _user; // Alias para compatibilidad
+  UserModel.UserModel? get user => _user;
+  UserModel.UserModel? get currentUser => _user; // Alias para compatibilidad
   String? get error => _error;
   bool get isLoading => _isLoading;
   bool get isAuthenticated => _status == AuthStatus.authenticated;
   bool get isEmailVerified => _authService.isEmailVerified;
-  bool get isAdmin => _user?.role == 'admin';
-  bool get isHost => _user?.role == 'host';
-  bool get isMusician => _user?.role == 'musician';
+  bool get isAdmin => _user?.role == UserModel.UserRole.admin;
+  bool get isHost => _user?.role == UserModel.UserRole.host;
+  bool get isMusician => _user?.role == UserModel.UserRole.musician;
 
   // Verificar estado de autenticación
   Future<void> checkAuthStatus() async {
@@ -140,6 +143,19 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Métodos para pruebas
+  @visibleForTesting
+  void setUser(UserModel.UserModel? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  @visibleForTesting
+  void setStatus(AuthStatus status) {
+    _status = status;
+    notifyListeners();
+  }
+
   // Registro con email y contraseña
   Future<bool> register({
     required String email,
@@ -153,30 +169,25 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Validaciones adicionales en el frontend
-      if (email.trim().isEmpty) {
-        _error = 'El email es requerido';
+      // Validar datos del perfil antes de registrar
+      final profileData = {
+        'email': email.trim(),
+        'name': name.trim(),
+        'role': role.trim(),
+        if (phone != null && phone.isNotEmpty) 'phone': phone.trim(),
+      };
+
+      final validationError = ProfileErrorHandler.validateProfileData(profileData);
+      if (validationError != null) {
+        _error = validationError.message;
         _status = AuthStatus.unauthenticated;
         _setLoading(false);
         return false;
       }
       
+      // Validación adicional de contraseña
       if (password.length < 8) {
         _error = 'La contraseña debe tener al menos 8 caracteres';
-        _status = AuthStatus.unauthenticated;
-        _setLoading(false);
-        return false;
-      }
-      
-      if (name.trim().isEmpty) {
-        _error = 'El nombre es requerido';
-        _status = AuthStatus.unauthenticated;
-        _setLoading(false);
-        return false;
-      }
-      
-      if (role.trim().isEmpty) {
-        _error = 'El rol es requerido';
         _status = AuthStatus.unauthenticated;
         _setLoading(false);
         return false;
@@ -498,7 +509,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Actualizar rol del usuario (solo para admins)
-  Future<bool> updateUserRole(String userId, String newRole) async {
+  Future<bool> updateUserRoleAsAdmin(String userId, String newRole) async {
     if (!isAdmin) {
       _error = 'No tienes permisos para realizar esta acción';
       notifyListeners();
@@ -635,5 +646,54 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  // Actualizar rol del usuario después del onboarding
+  Future<bool> updateUserRole(String role) async {
+    if (_user == null) return false;
+
+    _setLoading(true);
+    _error = null;
+    notifyListeners();
+
+    try {
+      final result = await _authService.updateUserRole(
+        userId: _user!.id,
+        role: role,
+      );
+
+      if (result.success) {
+        _user = result.user;
+        _error = null;
+        _setLoading(false);
+        notifyListeners();
+        return true;
+      } else {
+        _error = result.error;
+        _setLoading(false);
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = 'Error al actualizar el rol del usuario';
+      _setLoading(false);
+      notifyListeners();
+      return false;
+    }
+  }
+
+  // Verificar si el usuario necesita completar el onboarding
+  Future<bool> needsOnboarding() async {
+    try {
+      return await _authService.needsOnboarding();
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Getter para verificar si el usuario actual es guest
+  bool get isGuestUser => _user?.role == UserModel.UserRole.guest;
+
+  // Getter para verificar si el onboarding está completo
+  bool get isOnboardingComplete => _user?.isOnboardingComplete ?? false;
 
 }

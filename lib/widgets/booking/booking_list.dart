@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/utils/helpers.dart';
 import 'package:salas_beats/widgets/common/empty_state.dart';
 import 'package:salas_beats/widgets/common/loading_widget.dart';

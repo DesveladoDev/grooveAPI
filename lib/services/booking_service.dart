@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/models/listing_model.dart';
 import 'package:salas_beats/models/settings_model.dart';
 import 'package:salas_beats/utils/payment_utils.dart';
+import 'package:salas_beats/utils/validation_service.dart';
+import 'package:salas_beats/utils/error_handler.dart';
 
 class BookingResult {
 
@@ -264,24 +266,18 @@ class BookingService {
     String? specialRequests,
     Map<String, dynamic>? metadata,
   }) async {
-    // Validaciones de entrada
-    if (userId.isEmpty) {
-      return BookingResult.error('ID de usuario requerido');
-    }
-    if (listingId.isEmpty) {
-      return BookingResult.error('ID de listing requerido');
-    }
-    if (paymentMethodId.isEmpty) {
-      return BookingResult.error('Método de pago requerido');
-    }
-    if (startTime.isAfter(endTime)) {
-      return BookingResult.error('La fecha de inicio debe ser anterior a la fecha de fin');
-    }
-    if (startTime.isBefore(DateTime.now().subtract(const Duration(minutes: 5)))) {
-      return BookingResult.error('No se pueden crear reservas en el pasado');
-    }
-    if (guestCount <= 0) {
-      return BookingResult.error('El número de huéspedes debe ser mayor a 0');
+    // Usar validaciones centralizadas
+    final validationResult = ValidationService().validateBookingData(
+      listingId: listingId,
+      hostId: null, // Se obtendrá del listing
+      guestId: userId,
+      startTime: startTime,
+      endTime: endTime,
+      pricePerHour: null, // Se obtendrá del listing
+    );
+    
+    if (!validationResult.isValid) {
+      return BookingResult.error(validationResult.errors.first);
     }
 
     try {
@@ -363,14 +359,10 @@ class BookingService {
       
       return BookingResult.success(savedBooking, docRef.id);
       
-    } on ArgumentError catch (e) {
-      return BookingResult.error('Datos inválidos: ${e.message}');
-    } on StateError catch (e) {
-      return BookingResult.error('Estado inválido: ${e.message}');
-    } on FirebaseException catch (e) {
-      return BookingResult.error('Error de base de datos: ${e.message}');
-    } catch (e) {
-      return BookingResult.error('Error inesperado al crear reserva: ${e.toString()}');
+    } catch (e, stackTrace) {
+      final appError = ErrorHandler.handleException(e, stackTrace: stackTrace);
+      ErrorHandler.logError(appError);
+      return BookingResult.error(appError.message);
     }
   }
   

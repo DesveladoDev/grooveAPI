@@ -6,7 +6,10 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:salas_beats/config/constants.dart';
 import 'package:salas_beats/firebase_options.dart';
 import 'package:salas_beats/models/host_model.dart';
-import 'package:salas_beats/models/user_model.dart';
+import 'package:salas_beats/models/user_model.dart' as UserModel;
+import 'package:salas_beats/utils/validation_service.dart';
+import 'package:salas_beats/utils/error_handler.dart';
+import 'package:salas_beats/utils/profile_error_handler.dart';
 
 class AuthResult {
 
@@ -17,7 +20,7 @@ class AuthResult {
     this.message,
   });
 
-  factory AuthResult.success({UserModel? user, String? message}) => AuthResult(
+  factory AuthResult.success({UserModel.UserModel? user, String? message}) => AuthResult(
       success: true,
       user: user,
       message: message,
@@ -29,20 +32,47 @@ class AuthResult {
     );
   final bool success;
   final String? error;
-  final UserModel? user;
+  final UserModel.UserModel? user;
   final String? message;
 }
 
 class AuthService {
-  factory AuthService() => _instance;
-  AuthService._internal();
+  factory AuthService({
+    FirebaseAuth? firebaseAuth,
+    FirebaseFirestore? firebaseFirestore,
+    GoogleSignIn? googleSignIn,
+    ValidationService? validationService,
+  }) {
+    if (firebaseAuth != null || firebaseFirestore != null || googleSignIn != null || validationService != null) {
+      // Return a new instance for testing
+      return AuthService._internal(
+        firebaseAuth: firebaseAuth,
+        firebaseFirestore: firebaseFirestore,
+        googleSignIn: googleSignIn,
+        validationService: validationService,
+      );
+    }
+    return _instance;
+  }
+  
+  AuthService._internal({
+    FirebaseAuth? firebaseAuth,
+    FirebaseFirestore? firebaseFirestore,
+    GoogleSignIn? googleSignIn,
+    ValidationService? validationService,
+  }) : _auth = firebaseAuth ?? FirebaseAuth.instance,
+       _firestore = firebaseFirestore ?? FirebaseFirestore.instance,
+       _googleSignIn = googleSignIn ?? GoogleSignIn(
+         clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
+       ),
+       _validationService = validationService ?? ValidationService();
+  
   static final AuthService _instance = AuthService._internal();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
-  );
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+  final GoogleSignIn _googleSignIn;
+  final ValidationService _validationService;
 
   // Stream del usuario actual
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -65,48 +95,27 @@ class AuthService {
     String? phone,
   }) async {
     try {
-      // Validaciones de entrada
-      if (email.trim().isEmpty) {
-        return AuthResult.failure('El email es obligatorio');
-      }
-      if (password.isEmpty) {
-        return AuthResult.failure('La contraseña es obligatoria');
-      }
-      if (name.trim().isEmpty) {
-        return AuthResult.failure('El nombre es obligatorio');
+      // Usar validaciones centralizadas
+      final validationResult = _validationService.validateUserData(
+        email: email,
+        name: name,
+        phone: phone,
+      );
+      
+      // Validar contraseña por separado
+      final passwordValidation = _validationService.validatePassword(password);
+      
+      if (!validationResult.isValid) {
+        return AuthResult.failure(validationResult.errors.first);
       }
       
-      // Validar formato de email
-      if (!RegExp(AppConstants.emailPattern).hasMatch(email.trim())) {
-        return AuthResult.failure('Formato de email inválido');
+      if (!passwordValidation.isValid) {
+        return AuthResult.failure(passwordValidation.errors.first);
       }
       
-      // Validar contraseña
-      if (password.length < 6) {
-        return AuthResult.failure('La contraseña debe tener al menos 6 caracteres');
-      }
-      if (password.length > 128) {
-        return AuthResult.failure('La contraseña no puede exceder 128 caracteres');
-      }
-      
-      // Validar nombre
-      if (name.trim().length < 2) {
-        return AuthResult.failure('El nombre debe tener al menos 2 caracteres');
-      }
-      if (name.trim().length > 50) {
-        return AuthResult.failure('El nombre no puede exceder 50 caracteres');
-      }
-      
-      // Validar rol
+      // Validar rol específico
       if (!['musician', 'host'].contains(role)) {
         return AuthResult.failure('Rol inválido. Debe ser "musician" o "host"');
-      }
-      
-      // Validar teléfono si se proporciona
-      if (phone != null && phone.isNotEmpty) {
-        if (!RegExp(r'^\+?[1-9]\d{1,14}$').hasMatch(phone.replaceAll(RegExp(r'[\s\-\(\)]'), ''))) {
-          return AuthResult.failure('Formato de teléfono inválido');
-        }
       }
 
       // Crear usuario en Firebase Auth
@@ -124,9 +133,9 @@ class AuthService {
       await firebaseUser.updateDisplayName(name);
 
       // Crear documento del usuario en Firestore
-      final userModel = UserModel(
+      final userModel = UserModel.UserModel(
         id: firebaseUser.uid,
-        role: UserRole.values.firstWhere((e) => e.toString().split('.').last == role, orElse: () => UserRole.musician),
+        role: UserModel.UserRole.values.firstWhere((e) => e.toString().split('.').last == role, orElse: () => UserModel.UserRole.musician),
         name: name,
         email: email.trim().toLowerCase(),
         phone: phone,
@@ -155,14 +164,10 @@ class AuthService {
         user: userModel,
         message: 'Cuenta creada exitosamente. Por favor verifica tu email.',
       );
-    } on FirebaseAuthException catch (e) {
-      return AuthResult.failure(_getAuthErrorMessage(e.code));
-    } on FirebaseException catch (e) {
-      return AuthResult.failure('Error de base de datos: ${e.message}');
-    } on FormatException catch (e) {
-      return AuthResult.failure('Datos con formato inválido: ${e.message}');
-    } catch (e) {
-      return AuthResult.failure('Error inesperado durante el registro: ${e.toString()}');
+    } catch (e, stackTrace) {
+      final appError = ProfileErrorHandler.handleProfileCreationError(e, stackTrace: stackTrace);
+      ErrorHandler.logError(appError);
+      return AuthResult.failure(appError.message);
     }
   }
 
@@ -172,17 +177,15 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // Validaciones de entrada
-      if (email.trim().isEmpty) {
-        return AuthResult.failure('El email es obligatorio');
-      }
-      if (password.isEmpty) {
-        return AuthResult.failure('La contraseña es obligatoria');
+      // Usar validaciones centralizadas
+      final emailValidation = _validationService.validateEmail(email);
+      if (!emailValidation.isValid) {
+        return AuthResult.failure(emailValidation.errors.first);
       }
       
-      // Validar formato de email
-      if (!RegExp(AppConstants.emailPattern).hasMatch(email.trim())) {
-        return AuthResult.failure('Formato de email inválido');
+      final passwordValidation = _validationService.validatePassword(password);
+      if (!passwordValidation.isValid) {
+        return AuthResult.failure(passwordValidation.errors.first);
       }
 
       final userCredential = await _auth.signInWithEmailAndPassword(
@@ -211,7 +214,7 @@ class AuthService {
         }
       }
 
-      final userModel = UserModel.fromFirestore(userDoc);
+      final userModel = UserModel.UserModel.fromFirestore(userDoc);
 
       // Actualizar última fecha de actividad
       await _firestore.collection('users').doc(firebaseUser.uid).update({
@@ -222,14 +225,10 @@ class AuthService {
         user: userModel,
         message: 'Sesión iniciada exitosamente',
       );
-    } on FirebaseAuthException catch (e) {
-      return AuthResult.failure(_getAuthErrorMessage(e.code));
-    } on FirebaseException catch (e) {
-      return AuthResult.failure('Error de base de datos: ${e.message}');
-    } on FormatException catch (e) {
-      return AuthResult.failure('Datos con formato inválido: ${e.message}');
-    } catch (e) {
-      return AuthResult.failure('Error inesperado durante el inicio de sesión: ${e.toString()}');
+    } catch (e, stackTrace) {
+      final appError = ErrorHandler.handleException(e, stackTrace: stackTrace);
+      ErrorHandler.logError(appError);
+      return AuthResult.failure(appError.message);
     }
   }
 
@@ -263,23 +262,25 @@ class AuthService {
       // Verificar si es un usuario nuevo
       final userDoc = await _firestore.collection('users').doc(firebaseUser.uid).get();
       
-      UserModel userModel;
+      UserModel.UserModel userModel;
       if (!userDoc.exists) {
-        // Usuario nuevo, crear documento
-        userModel = UserModel(
+        // Usuario nuevo, crear documento con rol temporal
+        // El usuario deberá completar el onboarding para seleccionar su rol
+        userModel = UserModel.UserModel(
           id: firebaseUser.uid,
-          role: UserRole.musician, // Por defecto
+          role: UserModel.UserRole.guest, // Rol temporal hasta completar onboarding
           name: firebaseUser.displayName ?? 'Usuario',
           email: firebaseUser.email ?? '',
           phone: firebaseUser.phoneNumber,
           photoURL: firebaseUser.photoURL,
           verified: firebaseUser.emailVerified,
           createdAt: DateTime.now(),
+          isOnboardingComplete: false, // Requiere completar onboarding
         );
 
         await _firestore.collection('users').doc(firebaseUser.uid).set(userModel.toFirestore());
       } else {
-        userModel = UserModel.fromFirestore(userDoc);
+        userModel = UserModel.UserModel.fromFirestore(userDoc);
         
         // Actualizar información si es necesario
         await _firestore.collection('users').doc(firebaseUser.uid).update({
@@ -331,7 +332,7 @@ class AuthService {
       // Verificar si es un usuario nuevo
       final userDoc = await _firestore.collection('users').doc(firebaseUser.uid).get();
       
-      UserModel userModel;
+      UserModel.UserModel userModel;
       if (!userDoc.exists) {
         // Usuario nuevo, crear documento
         // Construir nombre completo desde Apple credential
@@ -343,20 +344,21 @@ class AuthService {
           displayName = 'Usuario Apple';
         }
 
-        userModel = UserModel(
+        userModel = UserModel.UserModel(
           id: firebaseUser.uid,
-          role: UserRole.musician, // Por defecto
+          role: UserModel.UserRole.guest, // Rol temporal hasta completar onboarding
           name: displayName,
           email: firebaseUser.email ?? '',
           phone: firebaseUser.phoneNumber,
           photoURL: firebaseUser.photoURL,
           verified: firebaseUser.emailVerified,
           createdAt: DateTime.now(),
+          isOnboardingComplete: false, // Requiere completar onboarding
         );
 
         await _firestore.collection('users').doc(firebaseUser.uid).set(userModel.toFirestore());
       } else {
-        userModel = UserModel.fromFirestore(userDoc);
+        userModel = UserModel.UserModel.fromFirestore(userDoc);
         
         // Actualizar información si es necesario
         await _firestore.collection('users').doc(firebaseUser.uid).update({
@@ -508,6 +510,18 @@ class AuthService {
         return AuthResult.failure('No hay usuario autenticado');
       }
 
+      // Validar datos del perfil antes de actualizar
+      final profileData = {
+        if (name != null) 'name': name,
+        if (phone != null) 'phone': phone,
+        if (photoURL != null) 'photoURL': photoURL,
+      };
+
+      final validationError = ProfileErrorHandler.validateProfileData(profileData);
+      if (validationError != null) {
+        return AuthResult.failure(validationError.message);
+      }
+
       final updates = <String, dynamic>{};
       
       if (name != null && name.isNotEmpty) {
@@ -530,8 +544,10 @@ class AuthService {
       }
 
       return AuthResult.success(message: 'Perfil actualizado exitosamente');
-    } catch (e) {
-      return AuthResult.failure('Error al actualizar perfil: ${e.toString()}');
+    } catch (e, stackTrace) {
+      final appError = ProfileErrorHandler.handleProfileUpdateError(e, stackTrace: stackTrace);
+      ErrorHandler.logError(appError);
+      return AuthResult.failure(appError.message);
     }
   }
 
@@ -572,7 +588,7 @@ class AuthService {
   }
 
   // Obtener datos del usuario actual
-  Future<UserModel?> getCurrentUserData() async {
+  Future<UserModel.UserModel?> getCurrentUserData() async {
     try {
       print('🔍 AuthService: getCurrentUserData iniciado');
       final user = currentUser;
@@ -605,7 +621,7 @@ class AuthService {
       }
 
       print('🔍 AuthService: Creando UserModel desde Firestore');
-      final userModel = UserModel.fromFirestore(userDoc);
+      final userModel = UserModel.UserModel.fromFirestore(userDoc);
       print('🔍 AuthService: UserModel creado exitosamente: ${userModel.email}');
       
       return userModel;
@@ -619,7 +635,7 @@ class AuthService {
   Future<bool> isAdmin() async {
     try {
       final userData = await getCurrentUserData();
-      return userData?.role == UserRole.admin;
+      return userData?.role == UserModel.UserRole.admin;
     } catch (e) {
       return false;
     }
@@ -629,7 +645,7 @@ class AuthService {
   Future<bool> isHost() async {
     try {
       final userData = await getCurrentUserData();
-      return userData?.role == UserRole.host;
+      return userData?.role == UserModel.UserRole.host;
     } catch (e) {
       return false;
     }
@@ -649,16 +665,17 @@ class AuthService {
         return AuthResult.success(message: 'El documento del usuario ya existe');
       }
 
-      // Crear documento del usuario
-      final userModel = UserModel(
+      // Crear documento del usuario con rol temporal
+      final userModel = UserModel.UserModel(
         id: user.uid,
-        role: UserRole.musician, // Por defecto
+        role: UserModel.UserRole.guest, // Rol temporal hasta completar onboarding
         name: user.displayName ?? 'Usuario',
         email: user.email ?? '',
         phone: user.phoneNumber,
         photoURL: user.photoURL,
         verified: user.emailVerified,
         createdAt: DateTime.now(),
+        isOnboardingComplete: false, // Requiere completar onboarding
       );
 
       await _firestore.collection('users').doc(user.uid).set(userModel.toFirestore());
@@ -721,6 +738,71 @@ class AuthService {
         return 'Ya existe una cuenta con un método de login diferente';
       default:
         return 'Error de autenticación: $errorCode';
+    }
+  }
+
+  // Actualizar rol del usuario después del onboarding
+  Future<AuthResult> updateUserRole({
+    required String userId,
+    required String role,
+  }) async {
+    try {
+      print('🔄 AuthService: Actualizando rol de usuario $userId a $role');
+      
+      // Validar que el rol sea válido
+      if (!['musician', 'host'].contains(role)) {
+        return AuthResult.failure('Rol inválido. Debe ser "musician" o "host"');
+      }
+
+      // Obtener el documento actual del usuario
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      
+      if (!userDoc.exists) {
+        return AuthResult.failure('Usuario no encontrado');
+      }
+
+      // Convertir string a enum
+      final userRole = UserModel.UserRole.values.firstWhere(
+        (e) => e.toString().split('.').last == role,
+        orElse: () => UserModel.UserRole.guest,
+      );
+
+      // Actualizar el documento con el nuevo rol y marcar onboarding como completo
+      await _firestore.collection('users').doc(userId).update({
+        'role': role,
+        'isOnboardingComplete': true,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      // Obtener el usuario actualizado
+      final updatedUserDoc = await _firestore.collection('users').doc(userId).get();
+      final updatedUser = UserModel.UserModel.fromFirestore(updatedUserDoc);
+
+      print('✅ AuthService: Rol actualizado exitosamente a $role');
+      return AuthResult.success(
+        user: updatedUser,
+        message: 'Rol actualizado exitosamente',
+      );
+    } catch (e) {
+      print('❌ AuthService: Error al actualizar rol: $e');
+      return AuthResult.failure('Error al actualizar el rol: ${e.toString()}');
+    }
+  }
+
+  // Verificar si el usuario necesita completar el onboarding
+  Future<bool> needsOnboarding() async {
+    try {
+      final user = currentUser;
+      if (user == null) return false;
+
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (!userDoc.exists) return true;
+
+      final userData = UserModel.UserModel.fromFirestore(userDoc);
+      return !userData.isOnboardingComplete || userData.role == UserModel.UserRole.guest;
+    } catch (e) {
+      print('❌ AuthService: Error al verificar onboarding: $e');
+      return false;
     }
   }
 }

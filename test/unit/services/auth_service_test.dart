@@ -1,29 +1,36 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:salas_beats/services/auth_service.dart';
 import 'package:salas_beats/models/user_model.dart';
+import 'package:salas_beats/utils/validation_service.dart';
 
 // Generate mocks
 @GenerateMocks([
-  FirebaseAuth,
-  FirebaseFirestore,
+  FirebaseAuth.FirebaseAuth,
+  Firestore.FirebaseFirestore,
   GoogleSignIn,
-  User,
-  UserCredential,
-  DocumentReference,
-  DocumentSnapshot,
-  QuerySnapshot,
+  FirebaseAuth.User,
+  FirebaseAuth.UserCredential,
+  Firestore.QuerySnapshot,
   GoogleSignInAccount,
   GoogleSignInAuthentication,
-  AuthCredential,
+  FirebaseAuth.AuthCredential,
+  ValidationService,
 ], customMocks: [
-  MockSpec<CollectionReference<Map<String, dynamic>>>(
+  MockSpec<Firestore.CollectionReference<Map<String, dynamic>>>(
     as: #MockCollectionReference,
+  ),
+  MockSpec<Firestore.DocumentReference<Map<String, dynamic>>>(
+    as: #MockDocumentReference,
+  ),
+  MockSpec<Firestore.DocumentSnapshot<Map<String, dynamic>>>(
+    as: #MockDocumentSnapshot,
   ),
 ])
 import 'auth_service_test.mocks.dart';
@@ -39,6 +46,7 @@ void main() {
     late MockDocumentReference mockDocumentReference;
     late MockDocumentSnapshot mockDocumentSnapshot;
     late MockCollectionReference mockCollectionReference;
+    late MockValidationService mockValidationService;
 
     setUp(() {
       mockAuth = MockFirebaseAuth();
@@ -49,8 +57,94 @@ void main() {
       mockDocumentReference = MockDocumentReference();
       mockDocumentSnapshot = MockDocumentSnapshot();
       mockCollectionReference = MockCollectionReference();
+      mockValidationService = MockValidationService();
 
-      authService = AuthService();
+      // Configure basic mocks
+      when(mockUser.email).thenReturn('test@example.com');
+      when(mockUser.uid).thenReturn('test-uid');
+      when(mockAuth.currentUser).thenReturn(mockUser);
+      
+      // Configure basic document snapshot
+      when(mockDocumentSnapshot.id).thenReturn('test-uid');
+      when(mockDocumentSnapshot.exists).thenReturn(true);
+      when(mockDocumentSnapshot.data()).thenReturn({
+        'id': 'test-uid',
+        'email': 'test@example.com',
+        'name': 'Test User',
+        'role': 'musician',
+        'createdAt': Timestamp.now(),
+      });
+
+      // Configure ValidationService mocks for different scenarios
+      // Valid data
+      when(mockValidationService.validateUserData(
+        email: 'test@example.com',
+        name: 'Test User',
+      )).thenReturn(const ValidationResult(isValid: true));
+      
+      when(mockValidationService.validatePassword('password123'))
+          .thenReturn(const ValidationResult(isValid: true));
+      
+      when(mockValidationService.validateEmail('test@example.com'))
+          .thenReturn(const ValidationResult(isValid: true));
+      
+      // Invalid data - casos específicos
+      when(mockValidationService.validateUserData(
+        email: '',
+        name: 'Test User',
+        phone: null,
+      )).thenReturn(const ValidationResult(isValid: false, errors: ['El email es obligatorio']));
+      
+      when(mockValidationService.validateUserData(
+        email: 'invalid-email',
+        name: 'Test User',
+        phone: null,
+      )).thenReturn(const ValidationResult(isValid: false, errors: ['El formato del email no es válido']));
+      
+      when(mockValidationService.validateUserData(
+        email: 'test@example.com',
+        name: 'Test User',
+        phone: null,
+      )).thenReturn(const ValidationResult(isValid: true));
+      
+      when(mockValidationService.validateEmail(''))
+          .thenReturn(const ValidationResult(isValid: false, errors: ['El email es obligatorio']));
+      
+      when(mockValidationService.validateEmail('invalid-email'))
+          .thenReturn(const ValidationResult(isValid: false, errors: ['El formato del email no es válido']));
+      
+      when(mockValidationService.validateEmail('invalid-email'))
+          .thenReturn(const ValidationResult(isValid: false, errors: ['El formato del email no es válido']));
+      
+      when(mockValidationService.validatePassword('123'))
+           .thenReturn(const ValidationResult(isValid: false, errors: ['La contraseña debe tener al menos 8 caracteres']));
+       
+      when(mockValidationService.validatePassword('password123'))
+           .thenReturn(const ValidationResult(isValid: true));
+       
+      when(mockValidationService.validatePassword('validPassword123'))
+           .thenReturn(const ValidationResult(isValid: true));
+
+      // Configure Firebase mocks for successful operations
+      when(mockAuth.createUserWithEmailAndPassword(
+        email: anyNamed('email'),
+        password: anyNamed('password'),
+      )).thenAnswer((_) async => mockUserCredential);
+
+      when(mockUserCredential.user).thenReturn(mockUser);
+      when(mockUser.updateDisplayName(any)).thenAnswer((_) async {});
+
+      when(mockFirestore.collection('users')).thenReturn(mockCollectionReference);
+      when(mockCollectionReference.doc(any)).thenReturn(mockDocumentReference);
+      when(mockDocumentReference.set(any)).thenAnswer((_) async {});
+      when(mockDocumentReference.get()).thenAnswer((_) async => mockDocumentSnapshot);
+
+      authService = AuthService(
+        firebaseAuth: mockAuth,
+        firebaseFirestore: mockFirestore,
+        googleSignIn: mockGoogleSignIn,
+        validationService: mockValidationService,
+      );
     });
 
     group('Email Registration', () {
@@ -60,19 +154,6 @@ void main() {
         const password = 'password123';
         const name = 'Test User';
         const role = 'musician';
-
-        when(mockAuth.createUserWithEmailAndPassword(
-          email: anyNamed('email'),
-          password: anyNamed('password'),
-        )).thenAnswer((_) async => mockUserCredential);
-
-        when(mockUserCredential.user).thenReturn(mockUser);
-        when(mockUser.uid).thenReturn('test-uid');
-        when(mockUser.updateDisplayName(any)).thenAnswer((_) async {});
-
-        when(mockFirestore.collection('users')).thenReturn(mockCollectionReference);
-        when(mockCollectionReference.doc(any)).thenReturn(mockDocumentReference);
-        when(mockDocumentReference.set(any)).thenAnswer((_) async {});
 
         // Act
         final result = await authService.registerWithEmailAndPassword(
@@ -115,7 +196,7 @@ void main() {
 
         // Assert
         expect(result.success, isFalse);
-        expect(result.error, equals('Formato de email inválido'));
+        expect(result.error, equals('El formato del email no es válido'));
       });
 
       test('should fail registration with short password', () async {
@@ -129,7 +210,7 @@ void main() {
 
         // Assert
         expect(result.success, isFalse);
-        expect(result.error, contains('contraseña debe tener al menos 6 caracteres'));
+        expect(result.error, contains('La contraseña debe tener al menos 8 caracteres'));
       });
 
       test('should fail registration with invalid role', () async {
@@ -196,7 +277,7 @@ void main() {
 
         // Assert
         expect(result.success, isFalse);
-        expect(result.error, equals('Formato de email inválido'));
+        expect(result.error, equals('El formato del email no es válido'));
       });
     });
 

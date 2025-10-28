@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:salas_beats/config/routes.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/models/listing_model.dart';
 import 'package:salas_beats/providers/booking_provider.dart';
 import 'package:salas_beats/widgets/common/custom_button.dart';

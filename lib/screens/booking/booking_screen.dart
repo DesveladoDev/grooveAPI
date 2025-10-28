@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:salas_beats/config/routes.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/models/listing_model.dart';
 import 'package:salas_beats/providers/auth_provider.dart';
 import 'package:salas_beats/providers/booking_provider.dart';

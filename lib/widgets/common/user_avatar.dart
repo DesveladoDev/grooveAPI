@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:salas_beats/models/user.dart';
+import 'package:salas_beats/models/user_model.dart';
 import 'package:salas_beats/utils/helpers.dart';
 
 class UserAvatar extends StatelessWidget {

@@ -32,6 +32,7 @@ import 'package:salas_beats/screens/host/host_dashboard_screen.dart';
 import 'package:salas_beats/screens/messages/chat_screen.dart';
 import 'package:salas_beats/screens/notifications/notifications_screen.dart';
 import 'package:salas_beats/screens/onboarding/onboarding_screen.dart';
+import 'package:salas_beats/screens/onboarding/role_selection_screen.dart';
 import 'package:salas_beats/screens/settings/notification_settings_screen.dart';
 import 'package:salas_beats/screens/settings/privacy_settings_screen.dart';
 // import '../screens/admin/admin_bookings_screen.dart';
@@ -66,6 +67,7 @@ class AppRoutes {
   // Route names
   static const String splash = '/';
   static const String onboarding = '/onboarding';
+  static const String roleSelection = '/role-selection';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
@@ -120,19 +122,23 @@ class AppRoutes {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         final isLoggedIn = authProvider.isAuthenticated;
         final isOnboardingComplete = authProvider.user?.isOnboardingComplete ?? false;
+        final isGuestUser = authProvider.isGuestUser;
         
         // Handle splash screen
         if (state.matchedLocation == splash) {
           return null; // Allow splash screen
         }
         
-        // If already logged in and currently on any auth-related screen, push to home/onboarding
+        // If already logged in and currently on any auth-related screen, redirect appropriately
         if (isLoggedIn) {
           final isAuthRoute =
               state.matchedLocation == login ||
               state.matchedLocation == register ||
               state.matchedLocation == forgotPassword;
           if (isAuthRoute) {
+            if (isGuestUser) {
+              return roleSelection; // Redirect guest users to role selection
+            }
             return isOnboardingComplete ? home : onboarding;
           }
         }
@@ -143,14 +149,20 @@ class AppRoutes {
               state.matchedLocation == login || 
               state.matchedLocation == register || 
               state.matchedLocation == forgotPassword ||
-              state.matchedLocation == onboarding) {
+              state.matchedLocation == onboarding ||
+              state.matchedLocation == roleSelection) {
             return null; // Allow auth screens
           }
           return login; // Redirect to login
         }
         
+        // Handle role selection for guest users
+        if (isLoggedIn && isGuestUser && state.matchedLocation != roleSelection) {
+          return roleSelection;
+        }
+        
         // Handle onboarding
-        if (isLoggedIn && !isOnboardingComplete && state.matchedLocation != onboarding) {
+        if (isLoggedIn && !isOnboardingComplete && !isGuestUser && state.matchedLocation != onboarding) {
           return onboarding;
         }
         
@@ -181,6 +193,10 @@ class AppRoutes {
         GoRoute(
           path: onboarding,
           builder: (context, state) => const OnboardingScreen(),
+        ),
+        GoRoute(
+          path: roleSelection,
+          builder: (context, state) => const RoleSelectionScreen(),
         ),
         
         // Authentication routes

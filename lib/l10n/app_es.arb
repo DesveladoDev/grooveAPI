@@ -1127,5 +1127,110 @@
   "profile": "Perfil",
   "@profile": {
     "description": "Tab de perfil en navegación inferior"
+  },
+
+  "profileCreationError": "Error al crear perfil",
+  "@profileCreationError": {
+    "description": "Error general para creación de perfil"
+  },
+
+  "profileCreationNetworkError": "No se pudo crear el perfil. Verifica tu conexión a internet e intenta nuevamente.",
+  "@profileCreationNetworkError": {
+    "description": "Error de red durante creación de perfil"
+  },
+
+  "profileCreationValidationError": "Los datos del perfil no son válidos. Revisa la información ingresada.",
+  "@profileCreationValidationError": {
+    "description": "Error de validación durante creación de perfil"
+  },
+
+  "profileCreationPermissionError": "No tienes permisos para crear este perfil. Contacta al administrador.",
+  "@profileCreationPermissionError": {
+    "description": "Error de permisos durante creación de perfil"
+  },
+
+  "profileCreationServerError": "Error interno del servidor. Intenta nuevamente en unos minutos.",
+  "@profileCreationServerError": {
+    "description": "Error del servidor durante creación de perfil"
+  },
+
+  "profileCreationTimeoutError": "La creación del perfil tardó demasiado tiempo. Verifica tu conexión e intenta nuevamente.",
+  "@profileCreationTimeoutError": {
+    "description": "Error de timeout durante creación de perfil"
+  },
+
+  "profileUpdateError": "Error al actualizar perfil",
+  "@profileUpdateError": {
+    "description": "Error general para actualización de perfil"
+  },
+
+  "profileUpdateNetworkError": "No se pudo actualizar el perfil. Verifica tu conexión a internet.",
+  "@profileUpdateNetworkError": {
+    "description": "Error de red durante actualización de perfil"
+  },
+
+  "profileUpdateValidationError": "Los datos ingresados no son válidos. Revisa la información.",
+  "@profileUpdateValidationError": {
+    "description": "Error de validación durante actualización de perfil"
+  },
+
+  "profileUpdatePermissionError": "No tienes permisos para actualizar este perfil.",
+  "@profileUpdatePermissionError": {
+    "description": "Error de permisos durante actualización de perfil"
+  },
+
+  "profileIncompleteError": "Tu perfil está incompleto. Completa todos los campos requeridos.",
+  "@profileIncompleteError": {
+    "description": "Error cuando el perfil está incompleto"
+  },
+
+  "profileNameRequiredError": "El nombre es obligatorio para crear tu perfil.",
+  "@profileNameRequiredError": {
+    "description": "Error cuando falta el nombre en el perfil"
+  },
+
+  "profileEmailRequiredError": "El email es obligatorio para crear tu perfil.",
+  "@profileEmailRequiredError": {
+    "description": "Error cuando falta el email en el perfil"
+  },
+
+  "profileRoleRequiredError": "Debes seleccionar un tipo de cuenta (Músico o Anfitrión).",
+  "@profileRoleRequiredError": {
+    "description": "Error cuando falta el rol en el perfil"
+  },
+
+  "profileNameTooShortError": "El nombre debe tener al menos 2 caracteres.",
+  "@profileNameTooShortError": {
+    "description": "Error cuando el nombre es muy corto"
+  },
+
+  "profileNameTooLongError": "El nombre no puede tener más de 50 caracteres.",
+  "@profileNameTooLongError": {
+    "description": "Error cuando el nombre es muy largo"
+  },
+
+  "profileEmailInvalidError": "El formato del email no es válido.",
+  "@profileEmailInvalidError": {
+    "description": "Error cuando el email tiene formato inválido"
+  },
+
+  "profilePhoneInvalidError": "El formato del teléfono no es válido.",
+  "@profilePhoneInvalidError": {
+    "description": "Error cuando el teléfono tiene formato inválido"
+  },
+
+  "profileBioTooLongError": "La biografía no puede tener más de 500 caracteres.",
+  "@profileBioTooLongError": {
+    "description": "Error cuando la biografía es muy larga"
+  },
+
+  "profileCreationSuccessMessage": "¡Perfil creado exitosamente! Bienvenido a Salas & Beats.",
+  "@profileCreationSuccessMessage": {
+    "description": "Mensaje de éxito al crear perfil"
+  },
+
+  "profileUpdateSuccessMessage": "Perfil actualizado exitosamente.",
+  "@profileUpdateSuccessMessage": {
+    "description": "Mensaje de éxito al actualizar perfil"
   }
 }

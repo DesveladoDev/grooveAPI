@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/providers/auth_provider.dart';
 import 'package:salas_beats/services/booking_service.dart';
 import 'package:salas_beats/utils/payment_utils.dart';

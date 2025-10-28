@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salas_beats/config/routes.dart';
-import 'package:salas_beats/models/booking_model.dart';
+import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/providers/booking_provider.dart';
 import 'package:salas_beats/widgets/booking/booking_model_card.dart';
 import 'package:salas_beats/widgets/common/custom_error_widget.dart';
