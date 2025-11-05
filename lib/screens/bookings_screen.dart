@@ -168,7 +168,7 @@ class _BookingsScreenState extends State<BookingsScreen> with TickerProviderStat
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('¿Estás seguro de que quieres cancelar esta reserva?'),
+            const Text('¿Estás seguro de que quieres cancelar esta reserva? gg'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),

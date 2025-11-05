@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ListingModel(
       id: '1',
       hostId: 'host1',
-      title: 'Estudio de Grabación Pro',
+      title: 'Estudio de Grabación Pross',
       description: 'Estudio profesional con equipos de alta gama para grabación y mezcla.',
       photos: ['https://example.com/studio1.jpg'],
       amenities: ['Micrófono profesional', 'Mesa de mezclas', 'Monitores de estudio', 'Cabina aislada'],
@@ -370,7 +370,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          // TODO: Implementar favoritos
+                          print("Hola");
                         },
                         icon: const Icon(
                           Icons.favorite_border,

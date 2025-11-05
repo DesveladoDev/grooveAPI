@@ -273,25 +273,28 @@ class _ExploreScreenState extends State<ExploreScreen> with TickerProviderStateM
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: TabBar(
-        controller: _tabController,
-        indicator: BoxDecoration(
-          color: theme.colorScheme.primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        tabs: const [
-          Tab(
-            icon: Icon(Icons.list),
-            text: 'Lista',
+     child: TabBar(
+            controller: _tabController,
+            indicator: BoxDecoration(
+              color: theme.colorScheme.primary,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            labelColor: Colors.white,
+            unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
+            indicatorSize: TabBarIndicatorSize.tab,
+            padding: const EdgeInsets.all(4.0),
+            labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
+            tabs: const [
+              Tab(
+                icon: Icon(Icons.list),
+                text: 'Lista',
+              ),
+              Tab(
+                icon: Icon(Icons.map),
+                text: 'Mapa',
+              ),
+            ],
           ),
-          Tab(
-            icon: Icon(Icons.map),
-            text: 'Mapa',
-          ),
-        ],
-      ),
     );
 
   Widget _buildListView(ThemeData theme) {
