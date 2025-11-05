@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:salas_beats/utils/exceptions.dart';
+import 'package:salas_beats/utils/power_mode.dart';
 
 enum NetworkStatus {
   connected,
@@ -100,6 +101,7 @@ class ConnectivityManager {
   
   Timer? _speedTestTimer;
   Timer? _pingTimer;
+  void Function(PowerState)? _powerModeListener;
   final List<double> _speedHistory = [];
   final List<int> _pingHistory = [];
   
@@ -127,6 +129,9 @@ class ConnectivityManager {
       
       // Start periodic network monitoring
       _startPeriodicMonitoring();
+
+      // React to power mode changes
+      _subscribePowerMode();
       
       debugPrint('ConnectivityManager initialized');
     } catch (e) {
@@ -283,15 +288,33 @@ class ConnectivityManager {
     }
   }
   
+  void _subscribePowerMode() {
+    _powerModeListener = (PowerState state) {
+      // En bajo consumo, reducir frecuencia y cancelar speed tests si es costoso
+      _restartPeriodicMonitoring();
+    };
+    PowerModeManager.instance.addListener(_powerModeListener!);
+  }
+
+  void _restartPeriodicMonitoring() {
+    _speedTestTimer?.cancel();
+    _pingTimer?.cancel();
+    _startPeriodicMonitoring();
+  }
+
   // Start periodic network monitoring
   void _startPeriodicMonitoring() {
-    // Update network info every 30 seconds
-    _pingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+    // Ajusta frecuencia según modo de energía
+    final pingInterval = PowerModeManager.instance
+        .adjustedInterval(const Duration(seconds: 30), lowPowerFactor: 3.0);
+    _pingTimer = Timer.periodic(pingInterval, (timer) {
       _updateNetworkInfo();
     });
     
-    // Run speed test every 5 minutes if connected
-    _speedTestTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    // Speed test: espacia mucho más en bajo consumo
+    final speedInterval = PowerModeManager.instance
+        .adjustedInterval(const Duration(minutes: 5), lowPowerFactor: 4.0);
+    _speedTestTimer = Timer.periodic(speedInterval, (timer) {
       if (isConnected && !isMetered) {
         _runSpeedTest();
       }
@@ -552,6 +575,10 @@ class ConnectivityManager {
     _speedTestTimer?.cancel();
     _pingTimer?.cancel();
     _networkInfoController.close();
+    if (_powerModeListener != null) {
+      PowerModeManager.instance.removeListener(_powerModeListener!);
+      _powerModeListener = null;
+    }
   }
 }
 

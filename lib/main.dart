@@ -24,6 +24,7 @@ import 'package:salas_beats/services/observability_service.dart';
 import 'package:salas_beats/services/analytics_service.dart';
 import 'package:salas_beats/services/localization_service.dart';
 import 'package:salas_beats/services/connectivity_service.dart';
+import 'package:salas_beats/utils/power_mode.dart';
 import 'package:salas_beats/services/firebase_optimization_service.dart';
 import 'package:salas_beats/utils/app_theme.dart';
 import 'package:salas_beats/utils/font_helper.dart';
@@ -89,6 +90,7 @@ Future<void> _initializeServices() async {
     await AnalyticsService.initialize();
     await LocalizationService().initialize();
     await NotificationService().initialize();
+    await PowerModeManager.instance.initialize();
     
     // Inicializar fuentes de manera segura para evitar errores de plataforma
     await FontHelper.initializeFonts();

@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import '../../services/logging_service.dart';
 import '../../services/observability_service.dart';
 import '../../utils/performance_utils.dart';
+import '../../utils/power_mode.dart';
 
 /// Performance monitoring overlay widget
 class PerformanceOverlay extends StatefulWidget {
@@ -36,6 +37,7 @@ class _PerformanceOverlayState extends State<PerformanceOverlay>
   final List<double> _fpsHistory = [];
   final List<FrameTiming> _frameTimings = [];
   bool _isVisible = false;
+  void Function(PowerState)? _powerModeListener;
 
   @override
   void initState() {
@@ -47,12 +49,25 @@ class _PerformanceOverlayState extends State<PerformanceOverlay>
     if (_isVisible) {
       _startMonitoring();
     }
+
+    // Pausar overlay en bajo consumo
+    _powerModeListener = (PowerState state) {
+      if (state == PowerState.low) {
+        _stopMonitoring();
+      } else {
+        if (_isVisible) _startMonitoring();
+      }
+    };
+    PowerModeManager.instance.addListener(_powerModeListener!);
   }
 
   @override
   void dispose() {
-    _updateTimer.cancel();
-    WidgetsBinding.instance.removeTimingsCallback(_onFrameTiming);
+    _stopMonitoring();
+    if (_powerModeListener != null) {
+      PowerModeManager.instance.removeListener(_powerModeListener!);
+      _powerModeListener = null;
+    }
     super.dispose();
   }
 
@@ -61,9 +76,18 @@ class _PerformanceOverlayState extends State<PerformanceOverlay>
     WidgetsBinding.instance.addTimingsCallback(_onFrameTiming);
     
     // Update metrics periodically
-    _updateTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    final interval = PowerModeManager.instance
+        .adjustedInterval(const Duration(seconds: 1), lowPowerFactor: 3.0);
+    _updateTimer = Timer.periodic(interval, (_) {
       _updateMetrics();
     });
+  }
+
+  void _stopMonitoring() {
+    try {
+      _updateTimer.cancel();
+    } catch (_) {}
+    WidgetsBinding.instance.removeTimingsCallback(_onFrameTiming);
   }
 
   void _onFrameTiming(List<FrameTiming> timings) {

@@ -99,6 +99,37 @@ class CacheManager {
     }
     _cacheDir = cacheSubDir;
   }
+
+  // Actualiza límites en caliente y recorta si es necesario
+  void updateLimits({int? maxMemoryEntries, int? maxDiskSizeBytes}) {
+    if (maxMemoryEntries != null) {
+      _config = CacheConfig(
+        defaultTtl: _config.defaultTtl,
+        maxMemoryEntries: maxMemoryEntries,
+        maxDiskSizeBytes: _config.maxDiskSizeBytes,
+        enableCompression: _config.enableCompression,
+        enableEncryption: _config.enableEncryption,
+        defaultStrategy: _config.defaultStrategy,
+      );
+      // Recorta memoria si excede
+      while (_memoryCache.length > _config.maxMemoryEntries) {
+        final oldestKey = _memoryCache.keys.first;
+        _memoryCache.remove(oldestKey);
+      }
+    }
+    if (maxDiskSizeBytes != null) {
+      _config = CacheConfig(
+        defaultTtl: _config.defaultTtl,
+        maxMemoryEntries: _config.maxMemoryEntries,
+        maxDiskSizeBytes: maxDiskSizeBytes,
+        enableCompression: _config.enableCompression,
+        enableEncryption: _config.enableEncryption,
+        defaultStrategy: _config.defaultStrategy,
+      );
+      // Actualiza tamaño de disco conforme al nuevo límite
+      _updateDiskCacheSize();
+    }
+  }
   
   // Generate cache key
   String _generateKey(String key) {

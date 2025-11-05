@@ -775,7 +775,7 @@ class ImageUtils {
 // Image cache manager
 class ImageCacheManager {
   static final Map<String, Uint8List> _cache = {};
-  static const int _maxCacheSize = 50; // Maximum number of cached images
+  static int _maxCacheSize = 50; // Maximum number of cached images
   
   static Future<Uint8List?> getCachedImage(String key) async => _cache[key];
   
@@ -796,6 +796,15 @@ class ImageCacheManager {
   static int get cacheSize => _cache.length;
   
   static int get cacheSizeBytes => _cache.values.fold(0, (sum, data) => sum + data.length);
+
+  static void setMaxCacheSize(int entries) {
+    _maxCacheSize = entries.clamp(10, 500);
+    // Si supera el nuevo límite, recorta
+    while (_cache.length > _maxCacheSize) {
+      final oldestKey = _cache.keys.first;
+      _cache.remove(oldestKey);
+    }
+  }
 }
 
 // Image widget extensions

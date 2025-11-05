@@ -8,6 +8,7 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:salas_beats/utils/helpers.dart';
+import 'package:salas_beats/utils/power_mode.dart';
 
 enum AnalyticsEvent {
   // User events
@@ -736,10 +737,9 @@ class AnalyticsManager {
   // Start flush timer
   void _startFlushTimer() {
     _flushTimer?.cancel();
-    _flushTimer = Timer.periodic(
-      const Duration(minutes: 5),
-      (_) => flushEvents(),
-    );
+    final interval = PowerModeManager.instance
+        .adjustedInterval(const Duration(minutes: 5), lowPowerFactor: 3.0);
+    _flushTimer = Timer.periodic(interval, (_) => flushEvents());
   }
   
   // Sanitize parameters for Firebase Analytics
