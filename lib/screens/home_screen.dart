@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:salas_beats/models/listing_model.dart';
 import 'package:salas_beats/providers/auth_provider.dart';
 import 'package:salas_beats/config/routes.dart';
+import 'package:salas_beats/widgets/common/app_bottom_nav_bar.dart';
+import 'package:salas_beats/widgets/common/promo_banner.dart';
 import 'package:salas_beats/services/localization_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -170,6 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
             
             // Barra de búsqueda y filtros
             _buildSearchBar(theme),
+            // Banner promocional
+            const PromoBanner(),
             
             // Lista de salas
             Expanded(
@@ -178,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(theme),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 
@@ -690,51 +694,5 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
 
-  Widget _buildBottomNavBar(ThemeData theme) => BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 0, // Home está activo
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.home),
-          label: context.l10n.home,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.explore),
-          label: context.l10n.explore,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.calendar_today),
-          label: context.l10n.bookings,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.chat),
-          label: context.l10n.messages,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.person),
-          label: context.l10n.profile,
-        ),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            // Ya estamos en home
-            break;
-          case 1:
-            context.go(AppRoutes.explore);
-            break;
-          case 2:
-            context.go(AppRoutes.bookingHistory);
-            break;
-          case 3:
-            context.go(AppRoutes.chatList);
-            break;
-          case 4:
-            context.go(AppRoutes.profile);
-            break;
-        }
-      },
-    );
+  
 }

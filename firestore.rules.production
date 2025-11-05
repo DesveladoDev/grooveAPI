@@ -14,16 +14,14 @@ service cloud.firestore {
     
     // Función para verificar si el usuario es administrador
     function isAdmin() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // Usa una custom claim segura asignada por Cloud Functions
+      return isAuthenticated() && request.auth.token.admin == true;
     }
     
     // Función para verificar si el usuario es anfitrión
     function isHost() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'host';
+      // Usa una custom claim segura asignada por Cloud Functions
+      return isAuthenticated() && request.auth.token.host == true;
     }
     
     // Función para validar datos de usuario
@@ -52,7 +50,10 @@ service cloud.firestore {
                        isOwner(userId) && 
                        isValidUserData();
       allow update: if isAuthenticated() && 
-                       (isOwner(userId) || isAdmin()) &&
+                       (
+                         (isOwner(userId) && request.resource.data.role == resource.data.role) || 
+                         isAdmin()
+                       ) &&
                        isValidUserData();
       allow delete: if isAdmin();
       

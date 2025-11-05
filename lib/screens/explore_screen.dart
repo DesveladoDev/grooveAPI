@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:salas_beats/widgets/common/app_bottom_nav_bar.dart';
+import 'package:salas_beats/widgets/common/promo_banner.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salas_beats/config/constants.dart';
 import 'package:salas_beats/models/listing_model.dart';
@@ -154,6 +156,8 @@ class _ExploreScreenState extends State<ExploreScreen> with TickerProviderStateM
             
             // Barra de búsqueda
             _buildSearchBar(theme),
+            // Banner promocional
+            const PromoBanner(),
             
             // Categorías
             _buildCategories(theme),
@@ -174,7 +178,7 @@ class _ExploreScreenState extends State<ExploreScreen> with TickerProviderStateM
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(theme),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 1),
     );
   }
 
@@ -596,51 +600,5 @@ class _ExploreScreenState extends State<ExploreScreen> with TickerProviderStateM
       ),
     );
 
-  Widget _buildBottomNavBar(ThemeData theme) => BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 1,
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Inicio',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
-          label: 'Explorar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Reservas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Mensajes',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Perfil',
-        ),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            context.go(AppRoutes.home);
-            break;
-          case 1:
-            // Ya estamos en explorar
-            break;
-          case 2:
-            context.go(AppRoutes.bookings);
-            break;
-          case 3:
-            context.go(AppRoutes.chatList);
-            break;
-          case 4:
-            context.go(AppRoutes.profile);
-            break;
-        }
-      },
-    );
+  
 }

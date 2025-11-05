@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salas_beats/widgets/common/app_bottom_nav_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salas_beats/models/booking.dart';
 import 'package:salas_beats/utils/app_routes.dart';
@@ -262,7 +263,7 @@ class _BookingsScreenState extends State<BookingsScreen> with TickerProviderStat
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(theme),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 2),
     );
   }
 
@@ -718,51 +719,5 @@ class _BookingsScreenState extends State<BookingsScreen> with TickerProviderStat
       ),
     );
 
-  Widget _buildBottomNavBar(ThemeData theme) => BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 2,
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Inicio',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
-          label: 'Explorar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Reservas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Mensajes',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Perfil',
-        ),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            context.go(AppRoutes.home);
-            break;
-          case 1:
-            context.go(AppRoutes.explore);
-            break;
-          case 2:
-            // Ya estamos en bookings
-            break;
-          case 3:
-            context.go(AppRoutes.chatList);
-            break;
-          case 4:
-            context.go(AppRoutes.profile);
-            break;
-        }
-      },
-    );
+  
 }

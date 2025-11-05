@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salas_beats/widgets/common/app_bottom_nav_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salas_beats/models/message_model.dart';
 import 'package:salas_beats/models/user_model.dart';
@@ -205,7 +206,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(theme),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 3),
       floatingActionButton: FloatingActionButton(
         onPressed: _showNewMessageDialog,
         backgroundColor: theme.colorScheme.primary,
@@ -563,51 +564,5 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
   }
   
-  Widget _buildBottomNavBar(ThemeData theme) => BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 3,
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Inicio',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
-          label: 'Explorar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Reservas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Mensajes',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Perfil',
-        ),
-      ],
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            context.go(AppRoutes.home);
-            break;
-          case 1:
-            context.go(AppRoutes.explore);
-            break;
-          case 2:
-            context.go(AppRoutes.bookings);
-            break;
-          case 3:
-            // Ya estamos en mensajes
-            break;
-          case 4:
-            context.go(AppRoutes.profile);
-            break;
-        }
-      },
-    );
+  
 }

@@ -4,6 +4,7 @@ import 'package:salas_beats/models/listing_model.dart';
 import 'package:salas_beats/providers/auth_provider.dart';
 import 'package:salas_beats/providers/listing_provider.dart';
 import 'package:salas_beats/providers/stripe_provider.dart';
+import 'package:salas_beats/providers/booking_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salas_beats/utils/app_routes.dart';
 import 'package:salas_beats/widgets/common/custom_button.dart';
@@ -11,6 +12,7 @@ import 'package:salas_beats/widgets/common/loading_overlay.dart';
 import 'package:salas_beats/widgets/host/earnings_card.dart';
 import 'package:salas_beats/widgets/host/listing_card.dart';
 import 'package:salas_beats/widgets/host/quick_stats.dart';
+import 'package:salas_beats/widgets/host/booking_heatmap.dart';
 
 class HostDashboardScreen extends StatefulWidget {
   const HostDashboardScreen({super.key});
@@ -192,6 +194,22 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
           
           // Estadísticas rápidas
           const QuickStats(),
+          const SizedBox(height: 24),
+          // Heatmap de actividad de reservas (mes actual)
+          Consumer<BookingProvider>(
+            builder: (context, bookingProvider, child) {
+              final now = DateTime.now();
+              final data = <DateTime, int>{};
+              for (final b in bookingProvider.hostBookings) {
+                final created = b.createdAt;
+                if (created.year == now.year && created.month == now.month) {
+                  final key = DateTime(created.year, created.month, created.day);
+                  data[key] = (data[key] ?? 0) + 1;
+                }
+              }
+              return BookingHeatmap(data: data);
+            },
+          ),
           const SizedBox(height: 24),
           
           // Ganancias del mes

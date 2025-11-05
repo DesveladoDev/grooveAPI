@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:salas_beats/config/constants.dart';
 import 'package:salas_beats/utils/exceptions.dart';
 import 'package:salas_beats/utils/formatters.dart';
@@ -741,9 +742,22 @@ class PaymentManager {
   
   // Get authentication token
   Future<String> _getAuthToken() async {
-    // This should get the current user's auth token
-    // Implementation depends on your auth system
-    return 'your_auth_token_here';
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw const AuthException('Debe iniciar sesión para realizar esta operación', code: 'unauthenticated');
+    }
+    try {
+      // Force refresh to ensure token validity when used for backend auth
+      final String? token = await user.getIdToken(true);
+      if ((token?.isEmpty ?? true)) {
+        throw const AuthException('Token de autenticación inválido', code: 'invalid-token');
+      }
+      return token!;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException.fromFirebaseAuth(e);
+    } catch (e) {
+      throw AuthException('Error obteniendo token de autenticación', originalError: e);
+    }
   }
 }
 
